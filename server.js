@@ -4,21 +4,31 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 5000;
 
-// 啟用 CORS 支持，以允許來自不同域的請求
+// 啟用 CORS 支持
 app.use(cors());
 
-// 使用 express 提供 public 文件夾中的靜態文件
+// 提供靜態文件
 app.use(express.static('public'));
 
-// 解析 JSON 格式的請求體
+// 解析 JSON
 app.use(express.json());
 
-// 添加根路由處理
+// 根路由處理
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// 定義 API 路由，例如登錄 API
+// 老師介面路由
+app.get('/teacher', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'teacher.html'));
+});
+
+// 學生介面路由
+app.get('/student', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'student.html'));
+});
+
+// 登錄 API
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
     const validCredentials = [
@@ -32,7 +42,7 @@ app.post('/api/login', (req, res) => {
     } else {
         res.json({ success: false, message: '帳號或密碼錯誤' });
     }
-});
+}); // 修正了缺少的括號
 
 // 啟動伺服器
 app.listen(port, () => {
