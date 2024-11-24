@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老師與學生介面登錄系統</title>
+    <link rel="stylesheet" href="public/styles.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .login-container h2 {
+            text-align: center;
+        }
+        .login-container form {
+            display: flex;
+            flex-direction: column;
+        }
+        .login-container input {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .login-container button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #45a049;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .buttons-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .buttons-container button:hover {
+            background-color: #45a049;
+        }
+        .bulletin-board {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .bulletin-post {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .upload-section {
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>老師與學生學習平台登錄系統</h1>
+    </header>
+
+    <section class="login-container">
+        <h2>登錄</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="用戶名" required>
+            <input type="password" id="password" placeholder="密碼" required>
+            <select id="userType">
+                <option value="student">學生</option>
+                <option value="teacher">老師</option>
+            </select>
+            <button type="button" onclick="login()">登錄</button>
+        </form>
+    </section>
+
+    <section id="teacher-interface" style="display: none;">
+        <h2>老師介面</h2>
+        <div class="buttons-container">
+            <button onclick="alert('學習檔案')">學習檔案</button>
+            <button onclick="alert('出題系統')">出題系統</button>
+        </div>
+        <button onclick="goBack()">返回</button>
+    </section>
+    
+    <section id="student-interface" style="display: none;">
+        <h2>學生介面</h2>
+        <div class="buttons-container">
+            <button onclick="alert('狀態追縱')">狀態追縱</button>
+            <button onclick="alert('家教AI')">家教AI</button>
+            <button onclick="alert('個人化筆記')">個人化筆記</button>
+        </div>
+        <div class="bulletin-board" id="bulletinBoard" style="display: none;">
+            <h3>課堂資訊</h3>
+            <div id="bulletinPosts"></div>
+        </div>
+        <button onclick="goBack()">返回</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 老師與學生學習平台</p>
+    </footer>
+
+    <script>
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            fetch('http://localhost:5000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.userType === "teacher") {
+                        document.getElementById("teacher-interface").style.display = "block";
+                        document.getElementById("student-interface").style.display = "none";
+                    } else if (data.userType === "student") {
+                        document.getElementById("student-interface").style.display = "block";
+                        document.getElementById("teacher-interface").style.display = "none";
+                    }
+                    document.querySelector(".login-container").style.display = "none";
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function goBack() {
+            document.getElementById("teacher-interface").style.display = "none";
+            document.getElementById("student-interface").style.display = "none";
+            document.querySelector(".login-container").style.display = "block";
+
+            // 清空用戶名和密碼輸入框
+            document.getElementById("username").value = '';
+            document.getElementById("password").value = '';
+            document.getElementById("userType").value = 'student';
+        }
+
+        function showBulletinBoard() {
+            fetch('/api/bulletins')
+            .then(response => response.json())
+            .then(data => {
+                const bulletinPosts = document.getElementById("bulletinPosts");
+                bulletinPosts.innerHTML = ''; // 清空之前的內容
+                data.forEach(post => {
+                    const postDiv = document.createElement('div');
+                    postDiv.className = 'bulletin-post';
+                    postDiv.innerHTML = `<p>${post.message}</p>`;
+                    bulletinPosts.appendChild(postDiv);
+                });
+                document.getElementById("bulletinBoard").style.display = "block";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
