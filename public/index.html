@@ -2,15 +2,21 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>登入系統</title>
+    <title>AI家教老師學生登入平台</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+        }
+        .platform-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
         }
         .login-container {
             padding: 20px;
@@ -32,6 +38,7 @@
     </style>
 </head>
 <body>
+    <h1 class="platform-title">AI家教老師學生登入平台</h1>
     <div class="login-container">
         <h2>登入系統</h2>
         <form id="loginForm">
@@ -46,39 +53,5 @@
             <button type="submit">登入</button>
         </form>
     </div>
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            try {
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    if (data.userType === 'teacher') {
-                        window.location.href = '/teacher';
-                    } else if (data.userType === 'student') {
-                        window.location.href = '/student';
-                    }
-                } else {
-                    alert(data.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('登入過程發生錯誤');
-            }
-        });
-    </script>
 </body>
 </html>
