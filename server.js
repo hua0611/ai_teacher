@@ -4,21 +4,21 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 5000;
 
-// 啟用 CORS 支持
+// 啟用 CORS 支持，以允許來自不同域的請求
 app.use(cors());
 
-// 提供靜態文件
+// 使用 express 提供 public 文件夾中的靜態文件
 app.use(express.static('public'));
 
-// 解析 JSON
+// 解析 JSON 格式的請求體
 app.use(express.json());
 
-// 根路由處理
+// 添加根路由處理
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// 登錄 API
+// 定義 API 路由，例如登錄 API
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
     const validCredentials = [
@@ -34,6 +34,7 @@ app.post('/api/login', (req, res) => {
     }
 });
 
+// 啟動伺服器
 app.listen(port, () => {
     console.log(`伺服器正在 http://localhost:${port} 運行`);
 });
