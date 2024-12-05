@@ -40,6 +40,14 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        .register-link {
+            margin-top: 15px;
+            text-align: center;
+        }
+        .register-link a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -64,12 +72,15 @@
             </div>
             <button type="submit">登入</button>
         </form>
+        <div class="register-link">
+            <p>還沒有帳號？<a href="/register">點此註冊</a></p>
+        </div>
     </div>
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const userType = document.getElementById('userType').value;
@@ -89,7 +100,7 @@
                     if (userType === 'teacher') {
                         window.location.href = '/teacher';
                     } else if (userType === 'student') {
-                        window.location.href = '/student';
+                        window.location.href = `/student/${username}`;
                     }
                 } else {
                     alert(data.message);
