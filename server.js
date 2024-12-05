@@ -15,22 +15,22 @@ if (!fs.existsSync(usersDir)) {
     fs.mkdirSync(usersDir);
 }
 
-// 根路由
+// 根路由：進入登入頁
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// 註冊頁面路由
+// 註冊頁面
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
-// 老師頁面路由
+// 教師頁面
 app.get('/teacher', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'teacher.html'));
 });
 
-// 學生頁面路由
+// 學生頁面
 app.get('/student', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'student.html'));
 });
