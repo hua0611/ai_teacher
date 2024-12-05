@@ -9,30 +9,27 @@ app.use(cors());
 app.use(express.static('public'));
 app.use(express.json());
 
-// 模擬資料庫
-const users = [];
-
 // 根路由
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// 註冊 API
-app.post('/api/register', (req, res) => {
-    const { username, password } = req.body;
-
-    if (users.find(user => user.username === username)) {
-        return res.json({ success: false, message: '帳號已存在' });
-    }
-
-    users.push({ username, password, userType: 'student' });
-    res.json({ success: true });
+// 註冊頁面路由
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
 // 登錄 API
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
-    const user = users.find(u => u.username === username && u.password === password);
+
+    // 模擬用戶驗證
+    const validCredentials = [
+        { username: "teacher1", password: "pass123", userType: "teacher" },
+        { username: "student1", password: "pass123", userType: "student" }
+    ];
+
+    const user = validCredentials.find(u => u.username === username && u.password === password);
 
     if (user) {
         res.json({ success: true, userType: user.userType });
@@ -41,31 +38,22 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-// 動態學生頁面
-app.get('/student/:username', (req, res) => {
-    const username = req.params.username;
-    const user = users.find(u => u.username === username);
+// 註冊 API
+app.post('/api/register', (req, res) => {
+    const { username, password } = req.body;
 
-    if (!user) {
-        return res.status(404).send('學生未找到');
+    // 簡單模擬：檢查用戶名是否已存在
+    const existingUser = fs.existsSync(`users/${username}.json`);
+    if (existingUser) {
+        return res.json({ success: false, message: '帳號已存在' });
     }
 
-    res.send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>${username} 的專屬頁面</title>
-        </head>
-        <body>
-            <h1>歡迎，${username}</h1>
-            <p>這是你的專屬頁面。</p>
-            <a href="/">返回登入</a>
-        </body>
-        </html>
-    `);
+    // 保存用戶資料
+    fs.writeFileSync(`users/${username}.json`, JSON.stringify({ username, password }));
+    res.json({ success: true });
 });
 
+// 啟動伺服器
 app.listen(port, () => {
     console.log(`伺服器正在 http://localhost:${port} 運行`);
 });
