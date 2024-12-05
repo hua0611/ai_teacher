@@ -9,6 +9,12 @@ app.use(cors());
 app.use(express.static('public'));
 app.use(express.json());
 
+// 確保 users 資料夾存在
+const usersDir = path.join(__dirname, 'users');
+if (!fs.existsSync(usersDir)) {
+    fs.mkdirSync(usersDir);
+}
+
 // 根路由
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -23,33 +29,37 @@ app.get('/register', (req, res) => {
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
 
-    // 模擬用戶驗證
-    const validCredentials = [
-        { username: "teacher1", password: "pass123", userType: "teacher" },
-        { username: "student1", password: "pass123", userType: "student" }
-    ];
+    const userFilePath = path.join(usersDir, `${username}.json`);
 
-    const user = validCredentials.find(u => u.username === username && u.password === password);
-
-    if (user) {
-        res.json({ success: true, userType: user.userType });
-    } else {
-        res.json({ success: false, message: '帳號或密碼錯誤' });
+    // 檢查用戶是否存在
+    if (!fs.existsSync(userFilePath)) {
+        return res.json({ success: false, message: '帳號或密碼錯誤' });
     }
+
+    // 讀取用戶資料並驗證密碼
+    const userData = JSON.parse(fs.readFileSync(userFilePath, 'utf8'));
+    if (userData.password !== password) {
+        return res.json({ success: false, message: '帳號或密碼錯誤' });
+    }
+
+    // 驗證成功
+    res.json({ success: true, userType: 'student' });
 });
 
 // 註冊 API
 app.post('/api/register', (req, res) => {
     const { username, password } = req.body;
 
-    // 簡單模擬：檢查用戶名是否已存在
-    const existingUser = fs.existsSync(`users/${username}.json`);
-    if (existingUser) {
+    const userFilePath = path.join(usersDir, `${username}.json`);
+
+    // 檢查用戶是否已存在
+    if (fs.existsSync(userFilePath)) {
         return res.json({ success: false, message: '帳號已存在' });
     }
 
     // 保存用戶資料
-    fs.writeFileSync(`users/${username}.json`, JSON.stringify({ username, password }));
+    fs.writeFileSync(userFilePath, JSON.stringify({ username, password }, null, 2));
+
     res.json({ success: true });
 });
 
