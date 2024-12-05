@@ -25,6 +25,16 @@ app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
+// 老師頁面路由
+app.get('/teacher', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'teacher.html'));
+});
+
+// 學生頁面路由
+app.get('/student', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'student.html'));
+});
+
 // 登錄 API
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
@@ -42,13 +52,13 @@ app.post('/api/login', (req, res) => {
         return res.json({ success: false, message: '帳號或密碼錯誤' });
     }
 
-    // 驗證成功
-    res.json({ success: true, userType: 'student' });
+    // 驗證成功，返回用戶類型
+    res.json({ success: true, userType: userData.userType });
 });
 
 // 註冊 API
 app.post('/api/register', (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, userType } = req.body;
 
     const userFilePath = path.join(usersDir, `${username}.json`);
 
@@ -58,7 +68,7 @@ app.post('/api/register', (req, res) => {
     }
 
     // 保存用戶資料
-    fs.writeFileSync(userFilePath, JSON.stringify({ username, password }, null, 2));
+    fs.writeFileSync(userFilePath, JSON.stringify({ username, password, userType }, null, 2));
 
     res.json({ success: true });
 });
