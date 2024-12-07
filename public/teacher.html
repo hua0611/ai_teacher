@@ -1,34 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>教師介面</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .menu-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .menu-item {
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            text-align: center;
-        }
-    </style>
+    <title><%= teacherName %> 的教師頁面</title>
 </head>
 <body>
-    <h1>教師介面</h1>
-    <div class="menu-container">
-        <a href="#" class="menu-item">學習檔案</a>
-        <a href="#" class="menu-item">出題系統</a>
-        <a href="/" class="menu-item">返回登入</a>
-    </div>
+    <h1>歡迎, <%= teacherName %>！</h1>
+    <p>今天的教學任務是：<%= task %></p>
+    <ul>
+        <li>學習檔案管理</li>
+        <li>出題系統</li>
+    </ul>
+    <a href="/">返回登入</a>
 </body>
 </html>
