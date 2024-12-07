@@ -1,0 +1,20 @@
+[
+  {
+    "username": "xiaoming",
+    "password": "pass123",
+    "userType": "student",
+    "displayName": "小明"
+  },
+  {
+    "username": "xiaohua",
+    "password": "pass123",
+    "userType": "student",
+    "displayName": "小華"
+  },
+  {
+    "username": "teacher1",
+    "password": "teach123",
+    "userType": "teacher",
+    "displayName": "老師王"
+  }
+]
