@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登入</title>
     <style>
         body {
@@ -61,6 +62,7 @@
     </div>
 
     <script>
+        // 監聽登入表單的提交事件
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -80,12 +82,12 @@
 
                 if (data.success) {
                     if (data.userType === 'teacher') {
-                        window.location.href = '/teacher';
+                        window.location.href = '/teacher'; // 教師跳轉到教師頁面
                     } else if (data.userType === 'student') {
-                        window.location.href = '/student';
+                        window.location.href = '/student'; // 學生跳轉到學生頁面
                     }
                 } else {
-                    alert(data.message);
+                    alert(data.message); // 顯示錯誤訊息
                 }
             } catch (error) {
                 console.error('Error:', error);
