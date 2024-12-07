@@ -4,12 +4,41 @@ const session = require('express-session');
 const app = express();
 const port = process.env.PORT || 5000;
 
-// 用戶資料（固定資料，只包含名稱和身份類型）
+// 用戶資料（假設為靜態的範例資料，可以從 users.json 讀取）
 const users = [
-    { username: 'xiaoming', password: 'pass123', userType: 'student', displayName: '小明' },
-    { username: 'xiaohua', password: 'pass123', userType: 'student', displayName: '小華' },
-    { username: 'teacher1', password: 'teach123', userType: 'teacher', displayName: '老師王' }
+    {
+        username: 'xiaoming',
+        password: 'pass123',
+        userType: 'student',
+        displayName: '小明',
+        task: '完成數學基礎練習',
+        progress: '50%',
+        notes: ['數學基礎練習筆記：需要加強加減法運算。', '語文閱讀筆記：記得閱讀《海底兩萬里》一章。'],
+        classroomInfo: '本週課程：數學基礎加減法，語文閱讀理解。'
+    },
+    {
+        username: 'xiaohua',
+        password: 'pass123',
+        userType: 'student',
+        displayName: '小華',
+        task: '完成語文閱讀練習',
+        progress: '30%',
+        notes: ['語文閱讀筆記：理解故事情節。'],
+        classroomInfo: '本週課程：語文閱讀理解，數學運算基礎。'
+    },
+    {
+        username: 'teacher1',
+        password: 'teach123',
+        userType: 'teacher',
+        displayName: '老師王',
+        task: '檢查學生作業並準備下次課程',
+        notes: ['準備下次數學課程。']
+    }
 ];
+
+// 設定模板引擎（我們這裡使用 EJS）
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 // 中間件
 app.use(express.static('public'));
@@ -20,23 +49,16 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// 根路由（登入頁面）
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// 登錄 API
+// 登入 API
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
-
-    // 查找用戶
     const user = users.find(u => u.username === username && u.password === password);
+
     if (!user) {
-        return res.status(400).json({ success: false, message: '帳號或密碼錯誤' });
+        return res.json({ success: false, message: '帳號或密碼錯誤' });
     }
 
-    // 儲存用戶資訊到 Session
-    req.session.user = user;
+    req.session.user = user;  // 儲存用戶資料
     res.json({ success: true, userType: user.userType });
 });
 
@@ -48,73 +70,38 @@ function checkAuthentication(req, res, next) {
     next();
 }
 
-// 動態生成學生專屬頁面
+// 學生頁面（動態生成）
 app.get('/student', checkAuthentication, (req, res) => {
-    if (req.session.user.userType !== 'student') {
+    const user = req.session.user;
+
+    if (user.userType !== 'student') {
         return res.redirect('/'); // 非學生身份，跳回登入頁
     }
 
-    const user = req.session.user; // 當前用戶資料
-
-    // 模擬的固定學習任務
-    const task = `${user.displayName}，今天的學習任務是完成數學基礎練習。`;
-
-    // 動態生成學生專屬頁面
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="zh-TW">
-        <head>
-            <meta charset="UTF-8">
-            <title>${user.displayName} 的學生專屬頁面</title>
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        </head>
-        <body class="container">
-            <h1>歡迎, ${user.displayName}！</h1>
-            <p>今天的學習任務：${task}</p>
-            <h2>專屬功能</h2>
-            <ul>
-                <li><b>狀態追蹤</b>：暫無</li>
-                <li><b>個人化筆記</b>：暫無</li>
-                <li><b>課堂資訊</b>：暫無</li>
-            </ul>
-            <a href="/" class="btn btn-primary">返回登入</a>
-        </body>
-        </html>
-    `);
+    // 渲染學生頁面，並傳遞學生資料
+    res.render('student', { 
+        displayName: user.displayName,
+        task: user.task,
+        progress: user.progress,
+        notes: user.notes,
+        classroomInfo: user.classroomInfo
+    });
 });
 
-// 動態生成教師專屬頁面
+// 教師頁面（動態生成）
 app.get('/teacher', checkAuthentication, (req, res) => {
-    if (req.session.user.userType !== 'teacher') {
+    const user = req.session.user;
+
+    if (user.userType !== 'teacher') {
         return res.redirect('/'); // 非教師身份，跳回登入頁
     }
 
-    const user = req.session.user; // 當前用戶資料
-
-    // 模擬的固定教學任務
-    const task = `${user.displayName}，今天的教學任務是檢查學生作業並準備下次課程。`;
-
-    // 動態生成教師專屬頁面
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="zh-TW">
-        <head>
-            <meta charset="UTF-8">
-            <title>${user.displayName} 的教師專屬頁面</title>
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        </head>
-        <body class="container">
-            <h1>歡迎, ${user.displayName}！</h1>
-            <p>今天的任務：${task}</p>
-            <h2>教師專屬功能</h2>
-            <ul>
-                <li>學習檔案管理</li>
-                <li>出題系統</li>
-            </ul>
-            <a href="/" class="btn btn-primary">返回登入</a>
-        </body>
-        </html>
-    `);
+    // 渲染教師頁面，並傳遞教師資料
+    res.render('teacher', {
+        teacherName: user.displayName,
+        task: user.task,
+        notes: user.notes
+    });
 });
 
 // 啟動伺服器
