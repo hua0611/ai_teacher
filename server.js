@@ -1,107 +1,101 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');  // 用於讀取 JSON 檔案
 const session = require('express-session');
 const app = express();
 const port = process.env.PORT || 5000;
 
-// 用戶資料（假設為靜態的範例資料，可以從 users.json 讀取）
-const users = [
-    {
-        username: 'xiaoming',
-        password: 'pass123',
-        userType: 'student',
-        displayName: '小明',
-        task: '完成數學基礎練習',
-        progress: '50%',
-        notes: ['數學基礎練習筆記：需要加強加減法運算。', '語文閱讀筆記：記得閱讀《海底兩萬里》一章。'],
-        classroomInfo: '本週課程：數學基礎加減法，語文閱讀理解。'
-    },
-    {
-        username: 'xiaohua',
-        password: 'pass123',
-        userType: 'student',
-        displayName: '小華',
-        task: '完成語文閱讀練習',
-        progress: '30%',
-        notes: ['語文閱讀筆記：理解故事情節。'],
-        classroomInfo: '本週課程：語文閱讀理解，數學運算基礎。'
-    },
-    {
-        username: 'teacher1',
-        password: 'teach123',
-        userType: 'teacher',
-        displayName: '老師王',
-        task: '檢查學生作業並準備下次課程',
-        notes: ['準備下次數學課程。']
-    }
-];
-
-// 設定模板引擎（我們這裡使用 EJS）
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+// 讀取 users.json 資料
+const usersFile = path.join(__dirname, 'users.json');
 
 // 中間件
 app.use(express.static('public'));
 app.use(express.json());
 app.use(session({
-    secret: 'your-secret-key', // 替換為你的密鑰
+    secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true
 }));
 
-// 登入 API
+// 根路由（登入頁面）
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// 登錄 API
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
-    const user = users.find(u => u.username === username && u.password === password);
 
-    if (!user) {
-        return res.json({ success: false, message: '帳號或密碼錯誤' });
-    }
+    // 讀取用戶資料
+    fs.readFile(usersFile, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: '伺服器錯誤' });
+        }
 
-    req.session.user = user;  // 儲存用戶資料
-    res.json({ success: true, userType: user.userType });
-});
+        // 解析用戶資料
+        const users = JSON.parse(data);
 
-// 檢查是否登入的中間件
-function checkAuthentication(req, res, next) {
-    if (!req.session.user) {
-        return res.redirect('/'); // 如果未登入，跳回登入頁
-    }
-    next();
-}
+        // 查找匹配的用戶
+        const user = users.find(u => u.username === username && u.password === password);
+        if (!user) {
+            return res.json({ success: false, message: '帳號或密碼錯誤' });
+        }
 
-// 學生頁面（動態生成）
-app.get('/student', checkAuthentication, (req, res) => {
-    const user = req.session.user;
+        // 儲存用戶資料到 session
+        req.session.user = user;
 
-    if (user.userType !== 'student') {
-        return res.redirect('/'); // 非學生身份，跳回登入頁
-    }
-
-    // 渲染學生頁面，並傳遞學生資料
-    res.render('student', { 
-        displayName: user.displayName,
-        task: user.task,
-        progress: user.progress,
-        notes: user.notes,
-        classroomInfo: user.classroomInfo
+        res.json({ success: true, userType: user.userType });
     });
 });
 
-// 教師頁面（動態生成）
-app.get('/teacher', checkAuthentication, (req, res) => {
-    const user = req.session.user;
-
-    if (user.userType !== 'teacher') {
-        return res.redirect('/'); // 非教師身份，跳回登入頁
+// 學生專屬頁面
+app.get('/student', (req, res) => {
+    if (!req.session.user || req.session.user.userType !== 'student') {
+        return res.redirect('/');  // 未登入或非學生身份
     }
 
-    // 渲染教師頁面，並傳遞教師資料
-    res.render('teacher', {
-        teacherName: user.displayName,
-        task: user.task,
-        notes: user.notes
-    });
+    const user = req.session.user;
+    const task = `${user.displayName}，今天的學習任務是完成數學基礎練習。`;
+
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="zh-TW">
+        <head>
+            <meta charset="UTF-8">
+            <title>${user.displayName} 的學生專屬頁面</title>
+        </head>
+        <body>
+            <h1>歡迎, ${user.displayName}！</h1>
+            <p>今天的學習任務：${task}</p>
+            <a href="/">返回登入</a>
+        </body>
+        </html>
+    `);
+});
+
+// 教師專屬頁面
+app.get('/teacher', (req, res) => {
+    if (!req.session.user || req.session.user.userType !== 'teacher') {
+        return res.redirect('/');  // 未登入或非教師身份
+    }
+
+    const user = req.session.user;
+    const task = `${user.displayName}，今天的教學任務是檢查學生作業並準備下次課程。`;
+
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="zh-TW">
+        <head>
+            <meta charset="UTF-8">
+            <title>${user.displayName} 的教師專屬頁面</title>
+        </head>
+        <body>
+            <h1>歡迎, ${user.displayName}！</h1>
+            <p>今天的任務：${task}</p>
+            <a href="/">返回登入</a>
+        </body>
+        </html>
+    `);
 });
 
 // 啟動伺服器
