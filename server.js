@@ -56,10 +56,18 @@ app.post('/api/login', (req, res) => {
     res.json({ success: true, userType: user.userType });
 });
 
+// 檢查是否登入的中間件
+function checkAuthentication(req, res, next) {
+    if (!req.session.user) {
+        return res.redirect('/'); // 如果未登入，跳回登入頁
+    }
+    next();
+}
+
 // 動態生成學生專屬頁面（使用固定數據模擬 AI 任務）
-app.get('/student', (req, res) => {
-    if (!req.session.user || req.session.user.userType !== 'student') {
-        return res.redirect('/'); // 未授權或非學生，跳回登入頁
+app.get('/student', checkAuthentication, (req, res) => {
+    if (req.session.user.userType !== 'student') {
+        return res.redirect('/'); // 非學生身份，跳回登入頁
     }
 
     const user = req.session.user; // 當前用戶資料
@@ -70,7 +78,7 @@ app.get('/student', (req, res) => {
     // 動態生成學生專屬頁面
     res.send(`
         <!DOCTYPE html>
-        <html>
+        <html lang="zh-TW">
         <head>
             <meta charset="UTF-8">
             <title>${user.displayName} 的學生專屬頁面</title>
@@ -91,9 +99,9 @@ app.get('/student', (req, res) => {
 });
 
 // 動態生成教師專屬頁面（使用固定數據模擬 AI 任務）
-app.get('/teacher', (req, res) => {
-    if (!req.session.user || req.session.user.userType !== 'teacher') {
-        return res.redirect('/'); // 未授權或非教師，跳回登入頁
+app.get('/teacher', checkAuthentication, (req, res) => {
+    if (req.session.user.userType !== 'teacher') {
+        return res.redirect('/'); // 非教師身份，跳回登入頁
     }
 
     const user = req.session.user; // 當前用戶資料
@@ -104,7 +112,7 @@ app.get('/teacher', (req, res) => {
     // 動態生成教師專屬頁面
     res.send(`
         <!DOCTYPE html>
-        <html>
+        <html lang="zh-TW">
         <head>
             <meta charset="UTF-8">
             <title>${user.displayName} 的教師專屬頁面</title>
