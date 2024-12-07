@@ -6,24 +6,9 @@ const port = process.env.PORT || 5000;
 
 // 用戶資料（固定資料，只包含名稱和身份類型）
 const users = [
-    {
-        username: 'xiaoming',
-        password: 'pass123',
-        userType: 'student',
-        displayName: '小明'
-    },
-    {
-        username: 'xiaohua',
-        password: 'pass123',
-        userType: 'student',
-        displayName: '小華'
-    },
-    {
-        username: 'teacher1',
-        password: 'teach123',
-        userType: 'teacher',
-        displayName: '老師王'
-    }
+    { username: 'xiaoming', password: 'pass123', userType: 'student', displayName: '小明' },
+    { username: 'xiaohua', password: 'pass123', userType: 'student', displayName: '小華' },
+    { username: 'teacher1', password: 'teach123', userType: 'teacher', displayName: '老師王' }
 ];
 
 // 中間件
@@ -47,12 +32,11 @@ app.post('/api/login', (req, res) => {
     // 查找用戶
     const user = users.find(u => u.username === username && u.password === password);
     if (!user) {
-        return res.json({ success: false, message: '帳號或密碼錯誤' });
+        return res.status(400).json({ success: false, message: '帳號或密碼錯誤' });
     }
 
     // 儲存用戶資訊到 Session
     req.session.user = user;
-
     res.json({ success: true, userType: user.userType });
 });
 
@@ -64,7 +48,7 @@ function checkAuthentication(req, res, next) {
     next();
 }
 
-// 動態生成學生專屬頁面（使用固定數據模擬 AI 任務）
+// 動態生成學生專屬頁面
 app.get('/student', checkAuthentication, (req, res) => {
     if (req.session.user.userType !== 'student') {
         return res.redirect('/'); // 非學生身份，跳回登入頁
@@ -82,8 +66,9 @@ app.get('/student', checkAuthentication, (req, res) => {
         <head>
             <meta charset="UTF-8">
             <title>${user.displayName} 的學生專屬頁面</title>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         </head>
-        <body>
+        <body class="container">
             <h1>歡迎, ${user.displayName}！</h1>
             <p>今天的學習任務：${task}</p>
             <h2>專屬功能</h2>
@@ -92,13 +77,13 @@ app.get('/student', checkAuthentication, (req, res) => {
                 <li><b>個人化筆記</b>：暫無</li>
                 <li><b>課堂資訊</b>：暫無</li>
             </ul>
-            <a href="/">返回登入</a>
+            <a href="/" class="btn btn-primary">返回登入</a>
         </body>
         </html>
     `);
 });
 
-// 動態生成教師專屬頁面（使用固定數據模擬 AI 任務）
+// 動態生成教師專屬頁面
 app.get('/teacher', checkAuthentication, (req, res) => {
     if (req.session.user.userType !== 'teacher') {
         return res.redirect('/'); // 非教師身份，跳回登入頁
@@ -116,8 +101,9 @@ app.get('/teacher', checkAuthentication, (req, res) => {
         <head>
             <meta charset="UTF-8">
             <title>${user.displayName} 的教師專屬頁面</title>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         </head>
-        <body>
+        <body class="container">
             <h1>歡迎, ${user.displayName}！</h1>
             <p>今天的任務：${task}</p>
             <h2>教師專屬功能</h2>
@@ -125,7 +111,7 @@ app.get('/teacher', checkAuthentication, (req, res) => {
                 <li>學習檔案管理</li>
                 <li>出題系統</li>
             </ul>
-            <a href="/">返回登入</a>
+            <a href="/" class="btn btn-primary">返回登入</a>
         </body>
         </html>
     `);
