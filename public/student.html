@@ -1,36 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>學生介面</title>
+    <title><%= displayName %> 的學生頁面</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .menu-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .menu-item {
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
+            margin: 0;
+            padding: 0;
             text-align: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #f3f3f3;
+            border-radius: 5px;
+        }
+        .progress-bar div {
+            height: 20px;
+            border-radius: 5px;
+            background-color: #4CAF50;
         }
     </style>
 </head>
 <body>
-    <h1>學生介面</h1>
-    <div class="menu-container">
-        <a href="#" class="menu-item">狀態追蹤</a>
-        <a href="#" class="menu-item">家教AI</a>
-        <a href="#" class="menu-item">個人化筆記</a>
-        <a href="#" class="menu-item">課堂資訊</a>
-        <a href="/" class="menu-item">返回登入</a>
+    <div class="content">
+        <h1>歡迎, <%= displayName %>！</h1>
+        <p>今天的學習任務是：<%= task %></p>
+        
+        <h2>學習進度</h2>
+        <div class="progress-bar">
+            <div style="width: <%= progress %>;"></div>
+        </div>
+        <p>進度：<%= progress %></p>
+        
+        <h2>個人化筆記</h2>
+        <ul>
+            <% notes.forEach(function(note) { %>
+                <li><%= note %></li>
+            <% }); %>
+        </ul>
+
+        <h2>課堂資訊</h2>
+        <p><%= classroomInfo %></p>
+
+        <a href="/">返回登入</a>
     </div>
 </body>
 </html>
