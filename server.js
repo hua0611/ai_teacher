@@ -1,76 +1,126 @@
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
+const session = require('express-session');
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+// 用戶資料（固定資料，只包含名稱和身份類型）
+const users = [
+    {
+        username: 'xiaoming',
+        password: 'pass123',
+        userType: 'student',
+        displayName: '小明'
+    },
+    {
+        username: 'xiaohua',
+        password: 'pass123',
+        userType: 'student',
+        displayName: '小華'
+    },
+    {
+        username: 'teacher1',
+        password: 'teach123',
+        userType: 'teacher',
+        displayName: '老師王'
+    }
+];
+
+// 中間件
 app.use(express.static('public'));
 app.use(express.json());
+app.use(session({
+    secret: 'your-secret-key', // 替換為你的密鑰
+    resave: false,
+    saveUninitialized: true
+}));
 
-// 確保 users 資料夾存在
-const usersDir = path.join(__dirname, 'users');
-if (!fs.existsSync(usersDir)) {
-    fs.mkdirSync(usersDir);
-}
-
-// 根路由：進入登入頁
+// 根路由（登入頁面）
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// 註冊頁面
-app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'register.html'));
-});
-
-// 教師頁面
-app.get('/teacher', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'teacher.html'));
-});
-
-// 學生頁面
-app.get('/student', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'student.html'));
 });
 
 // 登錄 API
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
 
-    const userFilePath = path.join(usersDir, `${username}.json`);
-
-    // 檢查用戶是否存在
-    if (!fs.existsSync(userFilePath)) {
+    // 查找用戶
+    const user = users.find(u => u.username === username && u.password === password);
+    if (!user) {
         return res.json({ success: false, message: '帳號或密碼錯誤' });
     }
 
-    // 讀取用戶資料並驗證密碼
-    const userData = JSON.parse(fs.readFileSync(userFilePath, 'utf8'));
-    if (userData.password !== password) {
-        return res.json({ success: false, message: '帳號或密碼錯誤' });
-    }
+    // 儲存用戶資訊到 Session
+    req.session.user = user;
 
-    // 驗證成功，返回用戶類型
-    res.json({ success: true, userType: userData.userType });
+    res.json({ success: true, userType: user.userType });
 });
 
-// 註冊 API
-app.post('/api/register', (req, res) => {
-    const { username, password, userType } = req.body;
-
-    const userFilePath = path.join(usersDir, `${username}.json`);
-
-    // 檢查用戶是否已存在
-    if (fs.existsSync(userFilePath)) {
-        return res.json({ success: false, message: '帳號已存在' });
+// 動態生成學生專屬頁面（使用固定數據模擬 AI 任務）
+app.get('/student', (req, res) => {
+    if (!req.session.user || req.session.user.userType !== 'student') {
+        return res.redirect('/'); // 未授權或非學生，跳回登入頁
     }
 
-    // 保存用戶資料
-    fs.writeFileSync(userFilePath, JSON.stringify({ username, password, userType }, null, 2));
+    const user = req.session.user; // 當前用戶資料
 
-    res.json({ success: true });
+    // 模擬的固定學習任務
+    const task = `${user.displayName}，今天的學習任務是完成數學基礎練習。`;
+
+    // 動態生成學生專屬頁面
+    res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>${user.displayName} 的學生專屬頁面</title>
+        </head>
+        <body>
+            <h1>歡迎, ${user.displayName}！</h1>
+            <p>今天的學習任務：${task}</p>
+            <h2>專屬功能</h2>
+            <ul>
+                <li><b>狀態追蹤</b>：暫無</li>
+                <li><b>個人化筆記</b>：暫無</li>
+                <li><b>課堂資訊</b>：暫無</li>
+            </ul>
+            <a href="/">返回登入</a>
+        </body>
+        </html>
+    `);
+});
+
+// 動態生成教師專屬頁面（使用固定數據模擬 AI 任務）
+app.get('/teacher', (req, res) => {
+    if (!req.session.user || req.session.user.userType !== 'teacher') {
+        return res.redirect('/'); // 未授權或非教師，跳回登入頁
+    }
+
+    const user = req.session.user; // 當前用戶資料
+
+    // 模擬的固定教學任務
+    const task = `${user.displayName}，今天的教學任務是檢查學生作業並準備下次課程。`;
+
+    // 動態生成教師專屬頁面
+    res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>${user.displayName} 的教師專屬頁面</title>
+        </head>
+        <body>
+            <h1>歡迎, ${user.displayName}！</h1>
+            <p>今天的任務：${task}</p>
+            <h2>教師專屬功能</h2>
+            <ul>
+                <li>學習檔案管理</li>
+                <li>出題系統</li>
+            </ul>
+            <a href="/">返回登入</a>
+        </body>
+        </html>
+    `);
 });
 
 // 啟動伺服器
