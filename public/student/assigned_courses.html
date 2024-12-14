@@ -22,26 +22,48 @@
     border-radius: 10px;
   }
 
+  /* Header */
+  .header {
+    width: 1440px;
+    height: 150px;
+    position: absolute;
+    left: -1px;
+    top: 12px;
+    background: #4A90E2;
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: black;
+  }
+
+  /* Sidebar */
   .sidebar {
     width: 250px;
     height: 850px;
     position: absolute;
-    left: 0;
+    left: -1px;
     top: 174px;
     background: #5FBCDE;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
     border-radius: 31px;
     border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+    gap: 40px;
   }
 
   .menu-item {
     width: 216px;
     height: 65px;
-    margin: 12px auto;
     background: #F89729;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
     color: #F4F4F4;
-    font-size: 32px;
+    font-size: 24px;
     text-align: center;
     line-height: 65px;
     border-radius: 10px;
@@ -53,60 +75,104 @@
     background: #FFB74D;
   }
 
-  .header {
-    width: 1440px;
-    height: 150px;
-    background: #4A90E2;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    padding-left: 48px;
-    font-size: 32px;
-    color: black;
-  }
-
-  .content-area {
+  /* Main Content Area */
+  .green-panel-container {
     width: 1080px;
     height: 677px;
     position: absolute;
     left: 304px;
     top: 215px;
-    background: #219D50;
-    border-radius: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    padding-bottom: 20px;
   }
 
-  .footer {
-    width: 1080px;
+  .green-panel-bg {
+    width: 1079.72px;
+    height: 677px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+  }
+
+  .green-bg {
+    width: 1075.94px; 
+    height: 677px;
+    position: absolute;
+    left: 3.50px; 
+    top: 0px;
+    background: #219D50; 
+    border-radius: 30px;
+  }
+
+  .green-panel-line {
+    width: 1079.72px; 
+    height: 0px;
+    position: absolute; 
+    left: 0px; 
+    top: 581.57px;
+    border: 1px #423131 solid;
+  }
+
+  .green-bottom-bar {
+    width: 1079.72px; 
+    height: 95.43px;
+    position: absolute; 
+    left: 0.28px; 
+    top: 581.57px;
+    background: #2D2521;
+  }
+
+  .bottom-panel-container {
+    width: 1080px; 
     height: 89px;
     position: absolute;
-    left: 304px;
+    left: 304px; 
     top: 927px;
-    background: #D9D9D9;
-    border-radius: 30px;
+  }
+
+  .bottom-panel-bg {
+    width:1080px; height:89px;
+    position:absolute; left:0; top:0;
+  }
+
+  .grey-bg {
+    width:1080px; height:89px;
+    position:absolute; left:0px; top:0px;
+    background:#D9D9D9; border-radius:30px;
+  }
+
+  .white-bar {
+    width:873px; height:70px;
+    position:absolute; left:89px; top:10px;
+    background:#F4F4F4; border-radius:30px;
     display: flex;
     align-items: center;
-    padding: 0 20px;
+    padding: 10px;
+    z-index: 2;
   }
 
-  .footer-content {
+  .footer-input {
     flex: 1;
-    height: 70px;
-    background: #F4F4F4;
-    border-radius: 30px;
-    margin-left: 20px;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    background: transparent;
+    padding: 0 10px;
   }
 
-  .footer img {
+  .footer-button {
     width: 50px;
-    height: 57px;
+    height: 50px;
+    background: #5FBCDE;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
   }
+
+  .bottom-img {
+    width:50px; height:57px;
+    position:absolute; left:21px; top:16px;
+  }
+
 </style>
 </head>
 <body>
@@ -116,22 +182,30 @@
 
   <!-- Sidebar -->
   <div class="sidebar">
- <a href="./學習紀錄.html" class="color-box orange-box5">學習紀錄</a>
-  <a href="./ai.html" class="color-box orange-box3">家教 AI</a>
-  <a href="./notes.html" class="color-box orange-box4">個人化筆記</a>
-  <a href="./assigned_courses.html" class="color-box orange-box2">老師指定課程</a>
+    <a href="./學習紀錄.html" class="menu-item">學習檔案</a>
+    <a href="./ai.html" class="menu-item">家教 AI</a>
+    <a href="./notes.html" class="menu-item">個人化筆記</a>
+    <a href="./assigned_courses.html" class="menu-item">老師指定課程</a>
   </div>
 
-  <!-- Main Content -->
-  <div class="content-area">
-    <!-- Main display area -->
-    <div style="width: 100%; height: 85%; background: #000; border-radius: 20px;"></div>
+  <!-- Right side (new structure) -->
+  <div class="green-panel-container">
+    <div class="green-panel-bg">
+      <div class="green-bg"></div>
+      <div class="green-panel-line"></div>
+    </div>
+    <div class="green-bottom-bar"></div>
   </div>
 
-  <!-- Footer -->
-  <div class="footer">
-    <img src="./assets/camera-icon.png" alt="Logo" />
-    <div class="footer-content"></div>
+  <div class="bottom-panel-container">
+    <div class="bottom-panel-bg">
+      <div class="grey-bg"></div>
+      <div class="white-bar">
+        <input class="footer-input" type="text" placeholder="輸入文字...">
+        <button class="footer-button">Send</button>
+      </div>
+    </div>
+    <img class="bottom-img" src="https://via.placeholder.com/50x57" alt="Camera Icon" />
   </div>
 </div>
 </body>
