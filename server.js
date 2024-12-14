@@ -44,6 +44,7 @@ app.post('/api/login', (req, res) => {
         // 儲存用戶資料到 session
         req.session.user = user;
 
+        // 回傳 userType 以利前端判斷是 student 還是 teacher
         res.json({ success: true, userType: user.userType });
     });
 });
@@ -51,26 +52,11 @@ app.post('/api/login', (req, res) => {
 // 學生專屬頁面
 app.get('/student', (req, res) => {
     if (!req.session.user || req.session.user.userType !== 'student') {
-        return res.redirect('/');  // 未登入或非學生身份
+        return res.redirect('/');  // 未登入或非學生身份則重導至首頁
     }
 
-    const user = req.session.user;
-    const task = `${user.displayName}，今天的學習任務是完成數學基礎練習。`;
-
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="zh-TW">
-        <head>
-            <meta charset="UTF-8">
-            <title>${user.displayName} 的學生專屬頁面</title>
-        </head>
-        <body>
-            <h1>歡迎, ${user.displayName}！</h1>
-            <p>今天的學習任務：${task}</p>
-            <a href="/">返回登入</a>
-        </body>
-        </html>
-    `);
+    // 傳送 public/student.html 這個完整學生頁面
+    res.sendFile(path.join(__dirname, 'public', 'student.html'));
 });
 
 // 教師專屬頁面
