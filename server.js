@@ -56,7 +56,7 @@ app.get('/student', (req, res) => {
     }
 
     // 傳送 public/student.html 這個完整學生頁面
-    res.sendFile(path.join(__dirname, 'public', 'student','student.html'));
+    res.sendFile(path.join(__dirname, 'public', 'student','student_home.html'));
 });
 
 // 教師專屬頁面
