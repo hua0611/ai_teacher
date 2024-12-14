@@ -54,19 +54,19 @@
     width: 216px;
     height: 65px;
     margin: 12px auto;
-    background: #999AE7;
+    background: #F89729;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     color: #F4F4F4;
     font-size: 32px;
     text-align: center;
     line-height: 65px;
     border-radius: 10px;
-    cursor: pointer;
     text-decoration: none;
+    cursor: pointer;
   }
 
   .menu-item:hover {
-    background: #F89729;
+    background: #FFB74D;
   }
 
   /* Main content area */
@@ -79,54 +79,39 @@
     background: #D9D9D9;
     border-radius: 30px;
     padding: 20px;
-  }
-
-  .section-title {
-    text-align: center;
-    font-size: 32px;
-    color: #151313;
-    margin-bottom: 20px;
-  }
-
-  .input-area {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: space-between;
   }
 
-  textarea {
-    width: 80%;
-    height: 100px;
+  .text-display {
+    flex: 1;
+    overflow-y: auto;
+    background: white;
+    padding: 20px;
     margin-bottom: 20px;
-    font-size: 16px;
-    padding: 10px;
-    border: 1px solid #ccc;
     border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   }
 
-  button {
-    background-color: #4CAF50;
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .nav-buttons button {
+    width: 150px;
+    height: 50px;
+    background: #4CAF50;
     color: white;
-    border: none;
-    padding: 10px 20px;
     font-size: 16px;
+    border: none;
     border-radius: 10px;
     cursor: pointer;
   }
 
-  button:hover {
-    background-color: #45a049;
-  }
-
-  .response-area {
-    margin-top: 20px;
-    width: 80%;
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    font-size: 16px;
-    color: black;
+  .nav-buttons button:hover {
+    background: #45a049;
   }
 </style>
 </head>
@@ -137,52 +122,57 @@
 
   <!-- Sidebar -->
   <div class="sidebar">
-      <a href="./學習紀錄.html" class="color-box orange-box5">學習紀錄</a>
-  <a href="./ai.html" class="color-box orange-box3">家教 AI</a>
-  <a href="./notes.html" class="color-box orange-box4">個人化筆記</a>
-  <a href="./assigned_courses.html" class="color-box orange-box2">老師指定課程</a>
-
+    <a href="./學習紀錄.html" class="menu-item">學習紀錄</a>
+    <a href="./ai.html" class="menu-item">家教 AI</a>
+    <a href="./notes.html" class="menu-item">個人化筆記</a>
+    <a href="./assigned_courses.html" class="menu-item">老師指定課程</a>
   </div>
 
   <!-- Main Content -->
   <div class="content-area">
-    <div class="section-title">學習紀錄</div>
-    <div class="input-area">
-      <textarea id="user-input" placeholder="輸入您的問題"></textarea>
-      <button id="send-button">送出問題</button>
-      <div class="response-area" id="response-area">回應將顯示在此處...</div>
+    <!-- Text Display Area -->
+    <div class="text-display" id="text-display">
+      對話內容將顯示在此處。
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+      <button id="prev-page">上一頁</button>
+      <button id="next-page">下一頁</button>
     </div>
   </div>
 </div>
 
 <script>
   // 固定的功能標籤：GPT-API-FUNCTION
-  document.getElementById('send-button').addEventListener('click', async () => {
-    const userInput = document.getElementById('user-input').value;
-    const responseArea = document.getElementById('response-area');
-    responseArea.textContent = '正在處理...';
+  let currentPage = 0;
+  const textDisplay = document.getElementById('text-display');
+  const pages = [
+    "這是第一頁的對話內容。",
+    "這是第二頁的對話內容。",
+    "這是第三頁的對話內容。"
+  ];
 
-    try {
-      const response = await fetch('https://api.openai.com/v1/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer YOUR_API_KEY` // 替換為您的 GPT API 金鑰
-        },
-        body: JSON.stringify({
-          model: 'text-davinci-003',
-          prompt: userInput,
-          max_tokens: 150
-        })
-      });
+  function updatePage() {
+    textDisplay.textContent = pages[currentPage] || "目前無更多內容。";
+  }
 
-      const data = await response.json();
-      responseArea.textContent = data.choices[0].text.trim();
-    } catch (error) {
-      responseArea.textContent = '請求失敗，請稍後再試。';
-      console.error(error);
+  document.getElementById('prev-page').addEventListener('click', () => {
+    if (currentPage > 0) {
+      currentPage--;
+      updatePage();
     }
   });
+
+  document.getElementById('next-page').addEventListener('click', () => {
+    if (currentPage < pages.length - 1) {
+      currentPage++;
+      updatePage();
+    }
+  });
+
+  // 初始顯示第一頁內容
+  updatePage();
 </script>
 </body>
 </html>
