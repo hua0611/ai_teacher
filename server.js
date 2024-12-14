@@ -9,7 +9,8 @@ const port = process.env.PORT || 5000;
 const usersFile = path.join(__dirname, 'users.json');
 
 // 中間件
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/student', express.static(path.join(__dirname, 'public', 'student')));
 app.use(express.json());
 app.use(session({
     secret: 'your-secret-key',
@@ -59,6 +60,11 @@ app.get('/student', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'student', 'student_home.html'));
 });
 
+// 個人化筆記頁面
+app.get('/student/notes.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'student', 'notes.html'));
+});
+
 // 教師專屬頁面
 app.get('/teacher', (req, res) => {
     if (!req.session.user || req.session.user.userType !== 'teacher') {
@@ -68,8 +74,7 @@ app.get('/teacher', (req, res) => {
     const user = req.session.user;
     const task = `${user.displayName}，今天的教學任務是檢查學生作業並準備下次課程。`;
 
-    res.send(`
-        <!DOCTYPE html>
+    res.send(`<!DOCTYPE html>
         <html lang="zh-TW">
         <head>
             <meta charset="UTF-8">
@@ -80,8 +85,7 @@ app.get('/teacher', (req, res) => {
             <p>今天的任務：${task}</p>
             <a href="/">返回登入</a>
         </body>
-        </html>
-    `);
+        </html>`);
 });
 
 // 啟動伺服器
