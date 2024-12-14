@@ -13,19 +13,29 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            background-color: #f9f9f9;
         }
         .login-container {
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
         .form-group {
             margin-bottom: 15px;
         }
+        label {
+            display: block;
+            font-weight: bold;
+        }
         input {
             width: 100%;
-            padding: 5px;
+            padding: 8px;
             margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
         }
         button {
             width: 100%;
@@ -36,6 +46,15 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        button:disabled {
+            background-color: #9E9E9E;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -44,13 +63,14 @@
         <form id="loginForm">
             <div class="form-group">
                 <label for="username">帳號：</label>
-                <input type="text" id="username" required>
+                <input type="text" id="username" name="username" required>
             </div>
             <div class="form-group">
                 <label for="password">密碼：</label>
-                <input type="password" id="password" required>
+                <input type="password" id="password" name="password" required>
             </div>
             <button type="submit">登入</button>
+            <p class="error-message" id="errorMessage"></p>
         </form>
     </div>
 
@@ -61,6 +81,15 @@
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const loginButton = e.target.querySelector('button');
+
+            // 清除之前的錯誤訊息
+            errorMessage.style.display = 'none';
+            errorMessage.textContent = '';
+
+            // 禁用按鈕防止多次提交
+            loginButton.disabled = true;
 
             try {
                 const response = await fetch('/api/login', {
@@ -77,14 +106,19 @@
                     if (data.userType === 'teacher') {
                         window.location.href = '/teacher'; // 教師跳轉到教師頁面
                     } else if (data.userType === 'student') {
-                        window.location.href = '/student_home'; // 學生跳轉到學生頁面
+                        window.location.href = '/student'; // 學生跳轉到學生頁面
                     }
                 } else {
-                    alert(data.message); // 顯示錯誤訊息
+                    errorMessage.textContent = data.message; // 顯示錯誤訊息
+                    errorMessage.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('登入過程發生錯誤');
+                errorMessage.textContent = '登入過程發生錯誤，請稍後再試';
+                errorMessage.style.display = 'block';
+            } finally {
+                // 恢復按鈕
+                loginButton.disabled = false;
             }
         });
     </script>
