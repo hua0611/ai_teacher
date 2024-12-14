@@ -6,7 +6,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // 讀取 users.json 資料
-const usersFile = path.join(__dirname, 'users', 'users.json');
+const usersFile = path.join(__dirname, 'users.json');
 
 // 中間件
 app.use(express.static('public'));
