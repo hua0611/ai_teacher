@@ -140,42 +140,329 @@
 </style>
 </head>
 <body>
-
-<div class="page-container">
-  <!-- 頂部藍色區塊 -->
-  <div class="top-bar"></div>
-  <!-- 標題 -->
-  <div class="header-title pos-left48-top77">學習檔案</div>
-  
-  <!-- 左側藍色欄 -->
+   <div class="main-container">
   <div class="sidebar"></div>
-
-  <!-- 橘色方塊 -->
   <div class="orange-box orange-box-bottom1"></div>
   <div class="orange-box orange-box-bottom2"></div>
   <div class="orange-box orange-box-mid1"></div>
   <div class="orange-box orange-box-mid2"></div>
   <div class="orange-box orange-box-top"></div>
+  <div class="top-bar"></div>
+  <div class="header-title">學習檔案</div>
+  <div class="text-item text-notes">個人化筆記</div>
+  <div class="text-item text-answer">作答區</div>
+  <div class="text-item text-teacher">老師指定課程</div>
+  <div class="text-item text-tutor">家教 AI</div>
+</div>
+
+  <div class="text-title">學習檔案</div>
+
+<!-- 區塊1 -->
+<div class="block block1">
+  <div class="block-bg"></div>
+  <div class="block-inner-bg"></div>
+  <div class="block-text strikethrough">教學規劃</div>
+</div>
+
+<!-- 區塊2 -->
+<div class="block block2">
+  <div class="block-bg"></div>
+  <div class="block-inner-bg"></div>
+  <div class="block-text strikethrough">各科狀態追蹤</div>
+</div>
+
+<!-- 區塊3 -->
+<div class="block block3">
+  <div class="block-bg"></div>
+  <div class="block-inner-bg"></div>
+  <div class="block-text">學習紀錄</div>
+</div>
+
+<!-- 區塊4 -->
+<div class="block block4">
+  <div class="block-bg"></div>
+  <div class="block-inner-bg"></div>
+  <div class="block-text strikethrough">學習成果</div>
+</div>
+
+<div class="main-container">
+  <div class="sidebar"></div>
+  <div class="purple-box purple-box1"></div>
+  <div class="purple-box purple-box2"></div>
+  <div class="purple-box purple-box3"></div>
+  <div class="purple-box purple-box4"></div>
+  <div class="purple-box purple-box5"></div>
+</div>
+
+<div class="header-bar"></div>
+<div class="header-title">歡迎，<%= displayName %></div>
+
+<!-- 將左側文字統一命名為 .menu-text，並用子class區分位置或功能 -->
+<div class="menu-text menu-notes">個人化筆記</div>
+<div class="menu-text menu-answer">作答區</div>
+<div class="menu-text menu-teacher">老師指定課程</div>
+<div class="menu-text menu-tutor">家教 AI</div>
+<div class="menu-title">學習檔案</div>
+
+<!-- 左側藍色欄 -->
+<div class="sidebar"></div>
+
+<!-- 橘色方塊 -->
+<div class="orange-box orange-box-bottom1"></div>
+<div class="orange-box orange-box-bottom2"></div>
+<div class="orange-box orange-box-mid1"></div>
+<div class="orange-box orange-box-mid2"></div>
+<div class="orange-box orange-box-top"></div>
+
+<!-- 頂部藍色欄 -->
+<div class="top-bar"></div>
+<div class="header-title">家教AI</div>
+
+<!-- 中間大區塊（綠色背景） -->
+<div class="main-panel">
+  <div class="panel-inner">
+    <div class="green-bg"></div>
+    <div class="bottom-line"></div>
+  </div>
+  <div class="bottom-bar"></div>
+  <div class="panel-inner">
+    <div class="green-bg"></div>
+    <div class="bottom-line"></div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- 底部灰色區塊 -->
+<div class="bottom-panel">
+  <div class="bottom-panel-inner">
+    <div class="grey-bg"></div>
+    <div class="white-bar"></div>
+  </div>
+  <img class="bottom-img" src="https://via.placeholder.com/50x57" />
+</div>
+<!-- 第一組頁面容器 -->
+<div class="page-container">
+  <div class="sidebar"></div>
+  <div class="top-bar"></div>
+  <div class="header-title">歡迎，登入者姓名</div>
+
+  <!-- 左側文字 -->
+  <div class="menu-text menu-study-file">學習檔案</div>
+  <div class="menu-text menu-tutor">家教 AI</div>
+  <div class="menu-text menu-notes">個人化筆記</div>
+  <div class="menu-text menu-answer">作答區</div>
+  <div class="menu-text menu-teacher">老師指定課程</div>
+
+  <!-- 橘色方塊 -->
+  <div class="color-box color-box-orange box-pos-top"></div>
+  <div class="color-box color-box-orange box-pos-mid1"></div>
+  <div class="color-box color-box-orange box-pos-mid2"></div>
+  <div class="color-box color-box-orange box-pos-bottom1"></div>
+  <div class="color-box color-box-orange box-pos-bottom2"></div>
+
+  <!-- 中間灰色區塊 -->
+  <div class="grey-panel"></div>
+</div>
+
+<!-- 第二組頁面容器(幾乎相同，只是將color-box-orange換成color-box-purple) -->
+<div class="page-container">
+  <div class="sidebar"></div>
+  <div class="top-bar"></div>
+  <div class="header-title">歡迎，登入者姓名</div>
+
+  <!-- 左側文字(同樣結構,文字相同) -->
+  <div class="menu-text menu-study-file" style="left:24px;top:262px;">學習檔案</div>
+  <div class="menu-text menu-tutor">家教 AI</div>
+  <div class="menu-text menu-notes">個人化筆記</div>
+  <div class="menu-text menu-answer">作答區</div>
+  <div class="menu-text menu-teacher">老師指定課程</div>
+
+  <!-- 紫色方塊 (將橘色改為紫色) -->
+  <div class="color-box color-box-purple box-pos-top"></div>
+  <div class="color-box color-box-purple box-pos-mid1"></div>
+  <div class="color-box color-box-purple box-pos-mid2"></div>
+  <div class="color-box color-box-purple box-pos-bottom1"></div>
+  <div class="color-box color-box-purple box-pos-bottom2"></div>
+
+  <!-- 若有需要灰底區塊,可加入 -->
+  <!-- <div class="grey-panel"></div> -->
+</div>
+<div class="page">
+  <div class="sidebar"></div>
+  <div class="color-box color-box-purple pos-bottom2"></div>
+  <div class="color-box color-box-purple pos-bottom1"></div>
+  <div class="color-box color-box-purple pos-mid1"></div>
+  <div class="color-box color-box-purple pos-mid2"></div>
+  <div class="color-box color-box-purple pos-top"></div>
+  <div class="top-bar"></div>
+  <div class="header-title">歡迎，登入者姓名</div>
+  <div class="menu-text menu-notes">個人化筆記</div>
+  <div class="menu-text menu-answer">作答區</div>
+  <div class="menu-text menu-teacher">老師指定課程</div>
+  <div class="menu-text menu-tutor">家教 AI</div>
+  <div class="menu-text menu-study-file">學習檔案</div>
+
+  <!-- 以下略，根據需要新增更多結構 -->
+
+<div class="page-container">
+  <!-- 左側藍色欄 -->
+  <div class="sidebar"></div>
+
+  <!-- 多個紫色方塊 -->
+  <div class="color-box color-box-purple pos-bottom2"></div>
+  <div class="color-box color-box-purple pos-bottom1"></div>
+  <div class="color-box color-box-purple pos-mid1"></div>
+  <div class="color-box color-box-purple pos-mid2"></div>
+  <div class="color-box color-box-purple pos-top"></div>
+
+  <!-- 頂部藍色欄 -->
+  <div class="top-bar"></div>
+  
+  <!-- 標題文字 -->
+  <div class="header-title">學習檔案</div>
 
   <!-- 左側文字項目 -->
   <div class="menu-text menu-notes">個人化筆記</div>
   <div class="menu-text menu-answer">作答區</div>
-  <div class="menu-text menu-teacher" style="left:24px;top:818px;">老師指定課程</div>
+  <div class="menu-text menu-teacher" style="left:32px;">老師指定課程</div>
   <div class="menu-text menu-tutor">家教 AI</div>
   <div class="menu-text menu-study-file">學習檔案</div>
 
-  <!-- 區塊示範(教學規劃等) -->
-  <div class="block" style="left:318px; top:271px;">
-    <div class="block-bg" style="position:absolute; left:0;top:0;background:#D9D9D9;border-radius:46px;width:523px;height:330px;"></div>
-    <div class="block-inner-bg" style="top:31px;"></div>
-    <div class="block-text strikethrough" style="width:375px; height:85px; left:74px; top:212px;">教學規劃</div>
+  <!-- 重複的sidebar、橘色方塊與top-bar （可依需要刪除或保留） -->
+  <div class="sidebar" style="left:-1px; top:174px; background:#5FBCDE;"></div>
+  <div class="color-box color-box-orange pos-bottom2" style="left:8px;"></div>
+  <div class="color-box color-box-orange pos-bottom1"></div>
+  <div class="color-box color-box-orange pos-mid1"></div>
+  <div class="color-box color-box-orange pos-mid2"></div>
+  <div class="color-box color-box-orange pos-top"></div>
+
+  <!-- 第二個頂部藍色欄（可依需要移除） -->
+  <div class="top-bar" style="left:-1px; top:12px;"></div>
+  <div class="header-title" style="left:46px; top:75px;">學習檔案</div>
+
+  <!-- 左側文字項目重複出現（可視需要整合/刪除） -->
+  <div class="menu-text menu-notes" style="top:537px;">個人化筆記</div>
+  <div class="menu-text menu-answer" style="top:681px;">作答區</div>
+  <div class="menu-text menu-teacher" style="left:32px; top:821px;">老師指定課程</div>
+  <div class="menu-text menu-tutor" style="top:397px;">家教 AI</div>
+  <div class="menu-text menu-study-file" style="left:52px; top:262px;">學習檔案</div>
+
+  <!-- 中間灰色（大）區塊 -->
+  <div class="grey-panel"></div>
+
+</div>
+
+<div class="page-container" style="background:white;">
+  <!-- 此處類似結構的另一組頁面，可同樣使用class並加以區分 -->
+  <div class="sidebar"></div>
+
+  <!-- 紫色方塊 -->
+  <div class="color-box color-box-purple pos-bottom2" style="left:8px;top:805px;"></div>
+  <div class="color-box color-box-purple pos-bottom1"></div>
+  <div class="color-box color-box-purple pos-mid1"></div>
+  <div class="color-box color-box-purple pos-mid2"></div>
+  <div class="color-box color-box-purple pos-top"></div>
+  
+  <!-- 頂部藍色欄 -->
+  <div class="top-bar"></div>
+  <div class="header-title" style="left:46px; top:75px;">學習檔案</div>
+
+  <!-- 左側文字項目(重複) -->
+  <div class="menu-text menu-notes" style="top:537px;">個人化筆記</div>
+  <div class="menu-text menu-answer" style="top:681px;">作答區</div>
+  <div class="menu-text menu-teacher" style="left:32px;top:821px;">老師指定課程</div>
+  <div class="menu-text menu-tutor" style="top:397px;">家教 AI</div>
+  <div class="menu-text menu-study-file" style="left:24px;top:262px;">學習檔案</div>
+
+  <!-- 中間標題「學習紀錄」 -->
+  <div class="header-subtitle2">學習紀錄</div>
+  
+  <!-- 再次左側藍色欄與紫色方塊 （依需要刪除） -->
+  <div class="sidebar" style="left:-1px;top:174px;"></div>
+  <div class="color-box color-box-purple pos-bottom2"></div>
+  <div class="color-box color-box-purple pos-bottom1"></div>
+  <div class="color-box color-box-purple pos-mid1"></div>
+  <div class="color-box color-box-purple pos-mid2"></div>
+  <div class="color-box color-box-purple pos-top"></div>
+
+  <!-- 個人化筆記、作答區、老師指定課程、家教AI、學習檔案 重複出現 -->
+  <div class="menu-text menu-notes" style="top:537px;">個人化筆記</div>
+  <div class="menu-text menu-answer" style="top:681px;">作答區</div>
+  <div class="menu-text menu-teacher" style="left:32px;top:821px;">老師指定課程</div>
+  <div class="menu-text menu-tutor" style="top:397px;">家教 AI</div>
+  <div class="menu-text menu-study-file" style="left:52px;top:262px;">學習檔案</div>
+
+  <!-- 中間灰區塊及行事曆（視需要加class） -->
+  <div class="small-grey-panel" style="left:338.99px; top:215px;">
+    <div style="width:1000px; height:300px; left:1.01px; top:0px; position:absolute; background:#D9D9D9; border-radius:30px"></div>
+    <div class="small-grey-panel-line"></div>
   </div>
 
-  <!-- 依序處理其他block、灰色面板、紫色方塊與多餘結構 -->
+  <div class="small-grey-panel" style="left:338px; top:619px;">
+    <div style="width:1000px; height:300px; left:1.01px; top:0px; position:absolute; background:#D9D9D9; border-radius:30px"></div>
+    <div class="small-grey-panel-line"></div>
+  </div>
 
-  <!-- 由於原程式碼過長且重複，本範例已簡化
-       你可繼續將其餘的行內style抽出為class，
-       並刪除不必要的重複元素，保留想要的版面結構。 -->
+  <div class="text-black" style="left:362px; top:231px;">完成事項</div>
+  <div class="text-black" style="left:362px; top:637px;">學習行事曆</div>
+
+  <div style="width:231px; height:62px; left:603px; top:66px; position:absolute; background:#D9D9D9; border-radius:30px"></div>
+  
+  <!-- 上方藍色區塊重複(可整合) -->
+  <div class="top-bar" style="left:-1px;top:12px;"></div>
+  <div class="top-bar" style="left:-1px;top:12px;"></div>
+
+</div>
+<div class="page-container">
+  <!-- 左側藍色欄 -->
+  <div class="sidebar"></div>
+
+  <!-- 紫色方塊（可視需要再為它們加上位置class） -->
+  <div class="color-box color-box-purple" style="left:8px; top:805px;"></div>
+  <div class="color-box color-box-purple" style="left:12px; top:668px;"></div>
+  <div class="color-box color-box-purple" style="left:12px; top:384px;"></div>
+  <div class="color-box color-box-purple" style="left:12px; top:518px;"></div>
+  <div class="color-box color-box-purple" style="left:12px; top:252px;"></div>
+
+  <!-- 頂部藍色區塊 -->
+  <div class="top-bar"></div>
+
+  <!-- 標題文字 (學習檔案) -->
+  <div class="header-title" style="left:48px; top:77px;">學習檔案</div>
+
+  <!-- 左側文字項目 -->
+  <div class="menu-text" style="left:24px; top:537px;">個人化筆記</div>
+  <div class="menu-text" style="left:24px; top:681px;">作答區</div>
+  <div class="menu-text" style="left:32px; top:821px;">老師指定課程</div>
+  <div class="menu-text" style="left:24px; top:397px;">家教 AI</div>
+  <div class="menu-text" style="left:24px; top:262px; height:50px;">學習檔案</div>
+
+  <!-- 教學規劃文字 -->
+  <div style="position:absolute; left:317px; top:77px;">
+    <span style="color:#151313; font-size:32px; font-weight:400;">教</span>
+    <span style="color:black; font-size:32px; font-weight:400;">學規劃</span>
+  </div>
+
+  <!-- 再次的sidebar與紫色方塊(依需要刪除重複) -->
+  <div class="sidebar" style="left:-1px; top:174px;"></div>
+  <div class="color-box color-box-purple" style="left:8px; top:805px;"></div>
+  <div class="color-box color-box-purple" style="left:12px; top:668px;"></div>
+  <div class="color-box color-box-purple" style="left:12px; top:384px;"></div>
+  <div class="color-box color-box-purple" style="left:12px; top:518px;"></div>
+  <div class="color-box color-box-purple" style="left:12px; top:252px;"></div>
+
+  <!-- 頂部藍色區塊重複 (可視需要刪除) -->
+  <div class="top-bar" style="left:-1px; top:12px;"></div>
+  <div class="header-title" style="left:48px; top:77px;">學習檔案</div>
+
+  <!-- 中間灰色大區塊(若需位置請加style) -->
+  <div class="grey-panel" style="left:304px; top:222px;"></div>
+
+  <!-- 白色線條 -->
+  <div style="width:1083px; height:11px; left:301px; top:306px; position:absolute; background:white"></div>
+
+  <!-- 完成事項文字 -->
+  <div style="position:absolute; left:338px; top:253px; color:black; font-size:32px; font-weight:400;">完成事項</div>
 </div>
 
 </body>
