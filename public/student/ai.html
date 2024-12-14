@@ -82,7 +82,6 @@
     position: absolute;
     left: 304px;
     top: 215px;
-    /* 沒有背景，直接包含裡面的結構 */
   }
 
   .green-panel-bg {
@@ -144,6 +143,29 @@
     width:873px; height:70px;
     position:absolute; left:89px; top:10px;
     background:#F4F4F4; border-radius:30px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    z-index: 2;
+  }
+
+  .footer-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    background: transparent;
+    padding: 0 10px;
+  }
+
+  .footer-button {
+    width: 50px;
+    height: 50px;
+    background: #5FBCDE;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
   }
 
   .bottom-img {
@@ -178,9 +200,12 @@
   <div class="bottom-panel-container">
     <div class="bottom-panel-bg">
       <div class="grey-bg"></div>
-      <div class="white-bar"></div>
+      <div class="white-bar">
+        <input class="footer-input" type="text" placeholder="輸入文字...">
+        <button class="footer-button">Send</button>
+      </div>
     </div>
-    <img class="bottom-img" src="https://via.placeholder.com/50x57" />
+    <img class="bottom-img" src="https://via.placeholder.com/50x57" alt="Camera Icon" />
   </div>
 </div>
 </body>
