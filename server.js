@@ -6,7 +6,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // 讀取 users.json 資料
-const usersFile = path.join(__dirname, 'users.json');
+const usersFile = path.join(__dirname, 'users', 'users.json');
 
 // 中間件
 app.use(express.static('public'));
@@ -55,8 +55,8 @@ app.get('/student', (req, res) => {
         return res.redirect('/');  // 未登入或非學生身份則重導至首頁
     }
 
-    // 傳送 public/student.html 這個完整學生頁面
-    res.sendFile(path.join(__dirname, 'public', 'student','student_home.html'));
+    // 傳送 public/student/student_home.html 這個完整學生頁面
+    res.sendFile(path.join(__dirname, 'public', 'student', 'student_home.html'));
 });
 
 // 教師專屬頁面
