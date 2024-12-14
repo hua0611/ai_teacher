@@ -11,6 +11,7 @@
     font-family: Inter, sans-serif;
     background: #f0f0f0;
   }
+
   .page-container {
     width: 1440px;
     height: 1024px;
@@ -20,6 +21,21 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
   }
+
+  /* Header */
+  .header {
+    width: 1440px;
+    height: 150px;
+    background: #4A90E2;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    text-align: center;
+    line-height: 150px;
+    font-size: 32px;
+    color: black;
+  }
+
+  /* Sidebar */
   .sidebar {
     width: 250px;
     height: 850px;
@@ -31,14 +47,15 @@
     border-radius: 31px;
     border: 1px solid black;
   }
+
   .menu-item {
     width: 216px;
     height: 65px;
-    margin: 12px auto;
+    margin: 30px auto;
     background: #F89729;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     color: #F4F4F4;
-    font-size: 32px;
+    font-size: 24px;
     text-align: center;
     line-height: 65px;
     border-radius: 10px;
@@ -46,32 +63,21 @@
     cursor: pointer;
     display: block;
   }
+
   .menu-item:hover {
     background: #FFB74D;
   }
-  .header {
-    width: 1440px;
-    height: 150px;
-    background: #4A90E2;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-    border: 1px solid black;
-    text-align: center;
-    line-height: 150px;
-    font-size: 32px;
-    color: black;
-  }
+
+  /* Main Content Area */
   .content-area {
     width: 1080px;
     height: 677px;
-    margin: 30px auto;
+    margin: 0 auto;
+    margin-top: 30px;
     background: #219D50;
     border-radius: 30px;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
+
   .footer {
     width: 1080px;
     height: 89px;
@@ -80,18 +86,40 @@
     border-radius: 30px;
     display: flex;
     align-items: center;
-    padding: 0 20px;
   }
-  .footer-content {
-    flex: 1;
-    height: 70px;
-    background: #F4F4F4;
-    border-radius: 30px;
-    margin-left: 20px;
-  }
+
   .footer img {
+    margin-left: 20px;
     width: 50px;
     height: 57px;
+  }
+
+  .footer .input-box {
+    flex: 1;
+    margin: 0 20px;
+    background: #F4F4F4;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .footer input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    background: transparent;
+    padding: 0 10px;
+  }
+
+  .footer .send-button {
+    background: #5FBCDE;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
   }
 </style>
 </head>
@@ -99,26 +127,25 @@
 <div class="page-container">
   <!-- Header -->
   <div class="header">家教 AI</div>
-  
+
   <!-- Sidebar -->
   <div class="sidebar">
-    <a href="./學習紀錄.html" class="color-box orange-box5">學習紀錄</a>
-  <a href="./ai.html" class="color-box orange-box3">家教 AI</a>
-  <a href="./notes.html" class="color-box orange-box4">個人化筆記</a>
-  <a href="./assigned_courses.html" class="color-box orange-box2">老師指定課程</a>
-
+    <a href="./學習紀錄.html" class="menu-item">學習紀錄</a>
+    <a href="./ai.html" class="menu-item">家教 AI</a>
+    <a href="./notes.html" class="menu-item">個人化筆記</a>
+    <a href="./assigned_courses.html" class="menu-item">老師指定課程</a>
   </div>
 
-  <!-- Main Content -->
-  <div class="content-area">
-    <!-- 主區域 -->
-    <p style="color: white; font-size: 24px;">這裡是家教 AI 主要內容區域。</p>
-  </div>
+  <!-- Main Content Area -->
+  <div class="content-area"></div>
 
   <!-- Footer -->
   <div class="footer">
-    <img src="https://via.placeholder.com/50x57" alt="Logo" />
-    <div class="footer-content"></div>
+    <img src="https://via.placeholder.com/50x57" alt="camera" />
+    <div class="input-box">
+      <input type="text" placeholder="輸入文字...">
+      <button class="send-button"></button>
+    </div>
   </div>
 </div>
 </body>
