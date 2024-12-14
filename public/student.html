@@ -2,26 +2,29 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title><%= displayName %> 的學生頁面</title>
+    <title>學生</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            text-align: center;
+        .header-bar {
+            width: 1440px;
+            height: 150px;
+            position: absolute;
+            left: -1px;
+            top: 12px;
+            background: #4A90E2;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 20px;
+            border: 1px solid black;
         }
-        .content {
-            padding: 20px;
-        }
-        .progress-bar {
-            width: 100%;
-            background-color: #f3f3f3;
-            border-radius: 5px;
-        }
-        .progress-bar div {
-            height: 20px;
-            border-radius: 5px;
-            background-color: #4CAF50;
+
+        .header-title {
+            position: absolute;
+            left: 48px;
+            top: 77px;
+            color: black;
+            font-size: 32px;
+            font-family: Inter, sans-serif;
+            font-weight: 400;
+            word-wrap: break-word;
         }
     </style>
 </head>
