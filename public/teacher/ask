@@ -15,11 +15,8 @@
 
   <!-- Sidebar -->
   <nav class="sidebar">
-    <a href="#" class="menu-item">學習檔案</a>
-    <a href="#" class="menu-item">家教 AI</a>
-    <a href="#" class="menu-item">個人化筆記</a>
-    <a href="#" class="menu-item">老師指定課程</a>
-    <a href="#" class="menu-item">教學指令</a>
+    <a href="./learn_course.html" class="menu-item">學習檔案</a>
+    <a href="./ask.html" class="menu-item">教學指令</a>
   </nav>
 
   <!-- Main Content -->
