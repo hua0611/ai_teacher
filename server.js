@@ -5,6 +5,10 @@ const session = require('express-session');
 const app = express();
 const port = process.env.PORT || 5000;
 
+// 設定 EJS 模板引擎
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 // 讀取 users.json 資料
 const usersFile = path.join(__dirname, 'users.json');
 
@@ -19,6 +23,7 @@ app.use(session({
 
 // 根路由（登入頁面）
 app.get('/', (req, res) => {
+    // 這邊仍然使用靜態檔案 index.html 作為登入頁面
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
@@ -55,8 +60,9 @@ app.get('/student', (req, res) => {
         return res.redirect('/');  // 未登入或非學生身份則重導至首頁
     }
 
-    // 傳送 public/student/student_home.html 這個完整學生頁面
-    res.sendFile(path.join(__dirname, 'public', 'student', 'student_home.html'));
+    const user = req.session.user;
+    // 使用 EJS 渲染學生專屬頁面
+    res.render('student_home', { user });
 });
 
 // 教師專屬頁面
@@ -68,20 +74,8 @@ app.get('/teacher', (req, res) => {
     const user = req.session.user;
     const task = `${user.displayName}，今天的教學任務是檢查學生作業並準備下次課程。`;
 
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="zh-TW">
-        <head>
-            <meta charset="UTF-8">
-            <title>${user.displayName} 的教師專屬頁面</title>
-        </head>
-        <body>
-            <h1>歡迎, ${user.displayName}！</h1>
-            <p>今天的任務：${task}</p>
-            <a href="/">返回登入</a>
-        </body>
-        </html>
-    `);
+    // 使用 EJS 渲染教師專屬頁面
+    res.render('teacher_home', { user, task });
 });
 
 // 啟動伺服器
