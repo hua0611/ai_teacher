@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>學習檔案</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Inter, sans-serif;
+    background: #f0f0f0;
+  }
+
+  .page-container {
+    width: 1440px;
+    height: 1024px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    position: relative;
+  }
+
+  .header {
+    width: 100%;
+    height: 150px;
+    background: #4A90E2;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: black;
+    font-weight: bold;
+  }
+
+  .sidebar {
+    width: 250px;
+    height: 850px;
+    position: absolute;
+    top: 174px;
+    left: 0;
+    background: #5FBCDE;
+    border-radius: 31px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    gap: 30px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .menu-item {
+    width: 216px;
+    height: 65px;
+    background: #F89729;
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    line-height: 65px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .menu-item:hover {
+    background: #FFB74D;
+  }
+
+  .content-area {
+    position: absolute;
+    left: 304px;
+    top: 222px;
+    width: 1080px;
+    height: 721px;
+    background: #D9D9D9;
+    border-radius: 30px;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .student-card {
+    width: 258px;
+    height: 184px;
+    background: #D9D9D9;
+    border-radius: 46px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .student-card .name {
+    font-size: 24px;
+    color: black;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .student-card .id {
+    font-size: 20px;
+    color: gray;
+  }
+</style>
+</head>
+<body>
+<div class="page-container">
+  <!-- Header -->
+  <div class="header">學習檔案</div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="#" class="menu-item">學習檔案</a>
+    <a href="#" class="menu-item">家教 AI</a>
+    <a href="#" class="menu-item">個人化筆記</a>
+    <a href="#" class="menu-item">老師指定課程</a>
+    <a href="#" class="menu-item">教學指令</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content-area">
+    <!-- Cards for Students -->
+    <div class="student-card">
+      <div class="name">姓名 A</div>
+      <div class="id">學號 123456</div>
+    </div>
+    <div class="student-card">
+      <div class="name">姓名 B</div>
+      <div class="id">學號 234567</div>
+    </div>
+    <div class="student-card">
+      <div class="name">姓名 C</div>
+      <div class="id">學號 345678</div>
+    </div>
+    <div class="student-card">
+      <div class="name">姓名 D</div>
+      <div class="id">學號 456789</div>
+    </div>
+    <div class="student-card">
+      <div class="name">姓名 E</div>
+      <div class="id">學號 567890</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
