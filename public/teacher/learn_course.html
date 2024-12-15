@@ -98,6 +98,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    text-decoration: none;
   }
 
   .student-card .name {
@@ -111,6 +113,10 @@
     font-size: 20px;
     color: gray;
   }
+
+  .student-card:hover {
+    background: #CDEDF9;
+  }
 </style>
 </head>
 <body>
@@ -120,36 +126,33 @@
 
   <!-- Sidebar -->
   <div class="sidebar">
-    <a href="#" class="menu-item">學習檔案</a>
-    <a href="#" class="menu-item">家教 AI</a>
-    <a href="#" class="menu-item">個人化筆記</a>
-    <a href="#" class="menu-item">老師指定課程</a>
-    <a href="#" class="menu-item">教學指令</a>
+    <a href="learn_course.html" class="menu-item">學習檔案</a>
+    <a href="ask.html" class="menu-item">教學指令</a>
   </div>
 
   <!-- Main Content -->
   <div class="content-area">
     <!-- Cards for Students -->
-    <div class="student-card">
+    <a href="student_record_123456.html" class="student-card">
       <div class="name">姓名 A</div>
       <div class="id">學號 123456</div>
-    </div>
-    <div class="student-card">
+    </a>
+    <a href="student_record_234567.html" class="student-card">
       <div class="name">姓名 B</div>
       <div class="id">學號 234567</div>
-    </div>
-    <div class="student-card">
+    </a>
+    <a href="student_record_345678.html" class="student-card">
       <div class="name">姓名 C</div>
       <div class="id">學號 345678</div>
-    </div>
-    <div class="student-card">
+    </a>
+    <a href="student_record_456789.html" class="student-card">
       <div class="name">姓名 D</div>
       <div class="id">學號 456789</div>
-    </div>
-    <div class="student-card">
+    </a>
+    <a href="student_record_567890.html" class="student-card">
       <div class="name">姓名 E</div>
       <div class="id">學號 567890</div>
-    </div>
+    </a>
   </div>
 </div>
 </body>
