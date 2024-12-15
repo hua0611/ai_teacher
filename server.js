@@ -80,7 +80,7 @@ app.get('/teacher/學習檔案', (req, res) => {
         return res.redirect('/'); // 未登入或非教師身份
     }
 
-    res.sendFile(path.join(__dirname, 'public/teacher', '學習檔案.html'));
+    res.sendFile(path.join(__dirname, 'public/teacher', 'learn_course.html'));
 });
 
 // 教師教學指令頁面
@@ -89,7 +89,7 @@ app.get('/teacher/教學指令', (req, res) => {
         return res.redirect('/'); // 未登入或非教師身份
     }
 
-    res.sendFile(path.join(__dirname, 'public/teacher', '教學指令.html'));
+    res.sendFile(path.join(__dirname, 'public/teacher', 'ask.html'));
 });
 
 // 啟動伺服器
