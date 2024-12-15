@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學生首頁</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Inter, sans-serif;
+            background: #f0f0f0;
+        }
+
+        .page-container {
+            width: 1440px;
+            height: 1024px;
+            position: relative;
+            background: white;
+            margin: 0 auto;
+        }
+
+        .sidebar-bg {
+            width: 250px;
+            height: 850px;
+            position: absolute;
+            left: -1px;
+            top: 174px;
+            background: #5FBCDE;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 31px;
+            border: 1px solid black;
+        }
+
+        .top-bar {
+            width: 1440px;
+            height: 150px;
+            position: absolute;
+            left: -1px;
+            top: 12px;
+            background: #4A90E2;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 20px;
+            border: 1px solid black;
+        }
+
+        .title-text {
+            position: absolute;
+            left: 48px;
+            top: 77px;
+            color: black;
+            font-size: 32px;
+            font-weight: 400;
+        }
+
+        .color-box {
+            width: 216px;
+            height: 65px;
+            position: absolute;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            line-height: 65px;
+            font-size: 32px;
+            color: #F4F4F4;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .color-box:hover {
+            background: #FFB74D;
+        }
+
+        .orange-box1 { left: 8px; top: 805px; background: #F89729; }
+        .orange-box2 { left: 12px; top: 668px; background: #F89729; }
+        .orange-box3 { left: 12px; top: 384px; background: #F89729; }
+        .orange-box4 { left: 12px; top: 518px; background: #F89729; }
+        .orange-box5 { left: 12px; top: 252px; background: #F89729; }
+
+        .task-panel {
+            width: 1080px;
+            height: 721px;
+            position: absolute;
+            left: 304px;
+            top: 222px;
+            background: #D9D9D9;
+            border-radius: 30px;
+            padding: 20px;
+        }
+
+        .task-panel-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .task-input {
+            width: 100%;
+            height: 85%;
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            resize: none;
+        }
+
+        .save-button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .save-button:hover {
+            background-color: #45A049;
+        }
+    </style>
+</head>
+<body>
+<div class="page-container">
+    <!-- Sidebar -->
+    <div class="sidebar-bg"></div>
+
+    <!-- Header -->
+    <div class="top-bar"></div>
+    <div class="title-text">歡迎，<%= user.displayName %></div>
+
+
+    <!-- Menu items -->
+  <a href="./學習紀錄.html" class="color-box orange-box5">學習紀錄</a>
+  <a href="./ai.html" class="color-box orange-box3">家教 AI</a>
+  <a href="./notes.html" class="color-box orange-box4">個人化筆記</a>
+  <a href="./assigned_courses.html" class="color-box orange-box2">老師指定課程</a>
+
+    <!-- Task Panel -->
+    <div class="task-panel">
+        <div class="task-panel-title">完成事項</div>
+        <textarea class="task-input" id="taskInput" placeholder="輸入完成事項..."></textarea>
+        <button class="save-button" id="saveTaskButton">儲存</button>
+    </div>
+</div>
+
+<script>
+    // 取得本地儲存的完成事項
+    const taskInput = document.getElementById('taskInput');
+    const savedTasks = localStorage.getItem('tasks');
+    if (savedTasks) {
+        taskInput.value = savedTasks;
+    }
+
+    // 儲存完成事項到本地儲存
+    document.getElementById('saveTaskButton').addEventListener('click', () => {
+        const tasks = taskInput.value;
+        localStorage.setItem('tasks', tasks);
+        alert('完成事項已儲存！');
+    });
+</script>
+</body>
+</html>
