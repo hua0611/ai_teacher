@@ -72,7 +72,6 @@ app.get('/teacher', (req, res) => {
     }
 
     const user = req.session.user;
-    const task = `${user.displayName}，今天的教學任務是檢查學生作業並準備下次課程。`;
 
     // 使用 EJS 渲染教師專屬頁面
     res.render('teacher_home', { user, task });
