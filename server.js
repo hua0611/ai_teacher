@@ -13,7 +13,8 @@ app.set('views', path.join(__dirname, 'views'));
 const usersFile = path.join(__dirname, 'users.json');
 
 // 中間件
-app.use(express.static('public'));
+app.use('/teacher', express.static(path.join(__dirname, 'public/teacher'))); // 配置教師靜態資源
+app.use(express.static('public')); // 配置一般靜態資源
 app.use(express.json());
 app.use(session({
     secret: 'your-secret-key',
@@ -23,8 +24,7 @@ app.use(session({
 
 // 根路由（登入頁面）
 app.get('/', (req, res) => {
-    // 這邊仍然使用靜態檔案 index.html 作為登入頁面
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html')); // 使用靜態檔案作為登入頁面
 });
 
 // 登錄 API
@@ -61,8 +61,7 @@ app.get('/student', (req, res) => {
     }
 
     const user = req.session.user;
-    // 使用 EJS 渲染學生專屬頁面
-    res.render('student_home', { user });
+    res.render('student_home', { user }); // 使用 EJS 渲染學生專屬頁面
 });
 
 // 教師專屬頁面
@@ -72,10 +71,25 @@ app.get('/teacher', (req, res) => {
     }
 
     const user = req.session.user;
-    const task = `${user.displayName}，今天的教學任務是檢查學生作業並準備下次課程。`;
+    res.render('teacher_home', { user }); // 使用 EJS 渲染教師專屬頁面
+});
 
-    // 使用 EJS 渲染教師專屬頁面
-    res.render('teacher_home', { user, task });
+// 教師學習檔案頁面
+app.get('/teacher/學習檔案', (req, res) => {
+    if (!req.session.user || req.session.user.userType !== 'teacher') {
+        return res.redirect('/'); // 未登入或非教師身份
+    }
+
+    res.sendFile(path.join(__dirname, 'public/teacher', '學習檔案.html'));
+});
+
+// 教師教學指令頁面
+app.get('/teacher/教學指令', (req, res) => {
+    if (!req.session.user || req.session.user.userType !== 'teacher') {
+        return res.redirect('/'); // 未登入或非教師身份
+    }
+
+    res.sendFile(path.join(__dirname, 'public/teacher', '教學指令.html'));
 });
 
 // 啟動伺服器
