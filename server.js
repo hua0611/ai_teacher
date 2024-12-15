@@ -75,7 +75,7 @@ app.get('/teacher', (req, res) => {
 });
 
 // 教師學習檔案頁面
-app.get('/teacher/學習檔案', (req, res) => {
+app.get('/teacher/learn_course', (req, res) => {
     if (!req.session.user || req.session.user.userType !== 'teacher') {
         return res.redirect('/'); // 未登入或非教師身份
     }
@@ -84,7 +84,7 @@ app.get('/teacher/學習檔案', (req, res) => {
 });
 
 // 教師教學指令頁面
-app.get('/teacher/教學指令', (req, res) => {
+app.get('/teacher/ask', (req, res) => {
     if (!req.session.user || req.session.user.userType !== 'teacher') {
         return res.redirect('/'); // 未登入或非教師身份
     }
