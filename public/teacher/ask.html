@@ -4,135 +4,174 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>教學指令頁面</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Inter, sans-serif;
+      background: white;
+    }
+
+    .page-container {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      height: 150px;
+      background: #4A90E2;
+      text-align: center;
+      line-height: 150px;
+      font-size: 32px;
+      color: black;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: #5FBCDE;
+      border-radius: 31px;
+      padding: 20px;
+      position: fixed;
+      height: calc(100% - 150px);
+      top: 150px;
+      left: 0;
+    }
+
+    .menu-item {
+      display: block;
+      padding: 10px 20px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      background: #F89729;
+      color: white;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .menu-item:hover {
+      background: #FFB74D;
+    }
+
+    /* Main Content Area */
+    .content-area {
+      margin-left: 270px;
+      padding: 20px;
+      background: #f0f0f0;
+      border-radius: 30px;
+      height: calc(100% - 150px - 100px); /* 預留底部輸入框高度 */
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .chat-window {
+      background: #d9d9d9;
+      border-radius: 30px;
+      width: 100%;
+      height: calc(100% - 60px);
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    .confirm-button {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: #84E2F6;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    /* Footer (Chat Input Bar) */
+    .footer {
+      background: #f0f0f0;
+      padding: 20px;
+      border-radius: 30px;
+      position: fixed;
+      bottom: 0;
+      left: 270px;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    .chat-input-bar {
+      background: #d9d9d9;
+      border-radius: 20px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      width: 50%;
+      box-sizing: border-box;
+    }
+
+    .chat-camera {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .chat-input {
+      flex: 1;
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+      outline: none;
+    }
+
+    .send-button {
+      background: #4A90E2;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      margin-left: 10px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    .send-button:hover {
+      background: #357ab8;
+    }
+  </style>
 </head>
 <body>
 <div class="page-container">
   <!-- Header -->
   <header class="header">
-    教學規劃
+    教學規劃 - 歡迎，教師
   </header>
 
   <!-- Sidebar -->
   <nav class="sidebar">
-    <a href="./learn_course.html" class="menu-item">學習檔案</a>
-    <a href="./ask.html" class="menu-item">教學指令</a>
+    <a href="learn_course.html" class="menu-item">學習檔案</a>
+    <a href="ask.html" class="menu-item">教學指令</a>
   </nav>
 
   <!-- Main Content -->
   <main class="content-area">
-    <div class="content-box">
-      <p>這裡是主要內容區</p>
-      <button class="confirm-button">確認</button>
+    <!-- 聊天視窗區域 -->
+    <div class="chat-window">
+      <!-- 在此處可動態顯示訊息內容或其他資訊 -->
     </div>
+    <button class="confirm-button">確認</button>
   </main>
 
-  <!-- Footer -->
+  <!-- Footer 輸入框 -->
   <footer class="footer">
-    <div class="input-container">
-      <img src="https://via.placeholder.com/50x57" alt="Placeholder" />
-      <input type="text" placeholder="請輸入內容" />
+    <div class="chat-input-bar">
+      <img src="https://via.placeholder.com/40x40" alt="camera" class="chat-camera">
+      <input type="text" class="chat-input" placeholder="請輸入內容">
+      <button class="send-button">▶</button>
     </div>
   </footer>
 </div>
-
-<!-- External CSS -->
-<style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Inter, sans-serif;
-  }
-
-  .page-container {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: white;
-  }
-
-  .header {
-    height: 150px;
-    background: #4A90E2;
-    text-align: center;
-    line-height: 150px;
-    font-size: 32px;
-    color: black;
-  }
-
-  .sidebar {
-    width: 250px;
-    background: #5FBCDE;
-    border-radius: 31px;
-    padding: 20px;
-    position: fixed;
-    height: calc(100% - 150px);
-    top: 150px;
-  }
-
-  .menu-item {
-    display: block;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-    text-decoration: none;
-    background: #F89729;
-    color: white;
-    border-radius: 10px;
-    text-align: center;
-  }
-
-  .menu-item:hover {
-    background: #FFB74D;
-  }
-
-  .content-area {
-    margin-left: 270px;
-    padding: 20px;
-    background: #D9D9D9;
-    border-radius: 30px;
-    height: calc(100% - 150px - 100px);
-  }
-
-  .content-box {
-    background: white;
-    border-radius: 20px;
-    padding: 20px;
-    text-align: center;
-  }
-
-  .confirm-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background: #84E2F6;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-
-  .footer {
-    background: #D9D9D9;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    border-radius: 30px;
-  }
-
-  .input-container {
-    display: flex;
-    align-items: center;
-  }
-
-  .input-container img {
-    margin-right: 10px;
-  }
-
-  .input-container input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-  }
-</style>
 </body>
 </html>
