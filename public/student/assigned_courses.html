@@ -23,61 +23,82 @@
     border-radius: 10px;
   }
 
+  /* 頂部藍色標題列 */
   .top-bar {
-    width: 100%;
-    height: 120px;
+    width: 1440px;
+    height: 150px;
+    position: absolute;
+    left: -1px;
+    top: 12px;
     background: #4A90E2;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    border: 1px solid black;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
-    color: white;
-    border-radius: 10px 10px 0 0;
+    font-size: 32px;
+    color: black;
   }
 
-  .sidebar {
+  /* 左側藍色側邊欄 */
+  .sidebar-bg {
     width: 250px;
-    height: calc(100% - 120px);
+    height: 850px;
     position: absolute;
-    left: 0;
-    top: 120px;
+    left: -1px;
+    top: 174px;
     background: #5FBCDE;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
-    gap: 20px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 31px;
+    border: 1px solid black;
   }
 
   .menu-item {
     width: 216px;
     height: 65px;
     background: #F89729;
-    color: white;
-    font-size: 20px;
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+    color: #F4F4F4;
+    font-size: 24px;
     text-align: center;
     line-height: 65px;
     border-radius: 10px;
     text-decoration: none;
     cursor: pointer;
+    display: block;
+    margin: 20px auto 0 auto;
   }
 
   .menu-item:hover {
     background: #FFB74D;
   }
 
+  /* 綠色主畫面區 */
   .green-panel-container {
     width: 1080px;
     height: 600px;
     position: absolute;
-    left: 280px;
-    top: 160px;
+    left: 304px;
+    top: 200px;
     background: #219D50;
-    border-radius: 20px;
+    border-radius: 30px;
+    overflow-y: auto; 
+    position: relative;
     padding: 20px;
+    box-sizing: border-box;
     color: white;
     font-size: 18px;
-    overflow-y: auto;
+  }
+
+  /* 黑色底部條 */
+  .black-bar {
+    width: 100%;
+    height: 70px;
+    background: #2D2926;
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 
   .chat-message {
@@ -94,33 +115,45 @@
     background: #D9F2D9;
   }
 
-  .bottom-panel-container {
-    width: 1080px;
-    height: 80px;
+  .input-bar {
     position: absolute;
-    left: 280px;
-    top: 800px;
-  }
-
-  .white-bar {
-    width: 850px;
-    height: 60px;
-    background: #F4F4F4;
-    border-radius: 20px;
+    bottom: 10px;
+    left: 40px;
+    right: 40px;
+    height: 50px;
     display: flex;
     align-items: center;
+    background: #F4F4F4;
+    border-radius: 30px;
     padding: 0 10px;
     box-sizing: border-box;
-    justify-content: space-between;
-    position: relative;
+  }
+
+  .bottom-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    background: #CCC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .bottom-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .footer-input {
     flex: 1;
     border: none;
     outline: none;
-    font-size: 16px;
-    padding: 0 10px;
+    font-size: 18px;
+    background: transparent;
   }
 
   .footer-button {
@@ -132,50 +165,37 @@
     cursor: pointer;
     font-size: 14px;
     color: black;
-  }
-
-  .bottom-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: #CCC;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    margin-right: 10px;
-  }
-
-  .bottom-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    margin-left: 10px;
+    flex-shrink: 0;
   }
 </style>
 </head>
 <body>
 <div class="page-container">
+  <!-- Header -->
   <div class="top-bar">老師指定教學</div>
 
-  <div class="sidebar">
+  <!-- Sidebar -->
+  <div class="sidebar-bg"></div>
+  <div style="position:absolute; top:252px; left:12px;">
     <a href="./learn_course.html" class="menu-item">學習檔案</a>
     <a href="./ai.html" class="menu-item">家教 AI</a>
     <a href="./notes.html" class="menu-item">個人化筆記</a>
     <a href="./assigned_courses.html" class="menu-item">老師指定課程</a>
   </div>
 
+  <!-- Green Panel with Black Bar -->
   <div class="green-panel-container" id="chatDisplay">
     <div class="chat-message" id="instructionMessage">等待老師指令...</div>
   </div>
 
-  <div class="bottom-panel-container">
-    <div class="white-bar">
-      <div class="bottom-img">
-        <img src="/images/camera.png" alt="Camera Icon">
-      </div>
-      <input class="footer-input" id="chatInput" type="text" placeholder="輸入指令或問題...">
-      <button class="footer-button" id="sendButton">Send</button>
+  <div class="input-bar">
+    <div class="bottom-img" id="cameraButton">
+      <img src="/images/camera.png" alt="Camera Icon">
     </div>
+    <input class="footer-input" id="chatInput" type="text" placeholder="輸入指令或問題...">
+    <button class="footer-button" id="sendButton">Send</button>
+    <input type="file" id="fileInput" accept="image/*" style="display: none;">
   </div>
 </div>
 
@@ -184,6 +204,8 @@
   const instructionMessage = document.getElementById('instructionMessage');
   const chatInput = document.getElementById('chatInput');
   const sendButton = document.getElementById('sendButton');
+  const cameraButton = document.getElementById('cameraButton');
+  const fileInput = document.getElementById('fileInput');
 
   sendButton.addEventListener('click', async () => {
     const userMessage = chatInput.value.trim();
@@ -210,6 +232,24 @@
       }
     } catch (error) {
       console.error('API 請求失敗：', error);
+    }
+  });
+
+  cameraButton.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        chatDisplay.innerHTML += `
+          <div class="chat-message user">
+            <img src="${e.target.result}" alt="Selected Image" style="max-width: 100%; border-radius: 10px;">
+          </div>`;
+      };
+      reader.readAsDataURL(file);
     }
   });
 
