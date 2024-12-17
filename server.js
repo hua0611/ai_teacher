@@ -4,6 +4,10 @@ const express = require('express');
 const session = require('express-session');
 const app = express();
 
+// 設定 EJS 模板引擎
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 // 初始化所需檔案
 const chatRecordsFile = path.join(__dirname, 'chatRecords.json');
 const usersFile = path.join(__dirname, 'users.json');
@@ -38,12 +42,15 @@ app.use(
 
 // 根路由：返回學習檔案
 app.get('/', (req, res) => {
+    // 若需要使用 EJS，請將學習檔案也轉換成 ejs
+    // 否則可繼續使用原始 HTML 檔案:
     res.sendFile(path.join(__dirname, 'public', '學習檔案.html'));
 });
 
-// 學生主頁路由
+// 學生主頁路由：使用 EJS 模板
 app.get('/student/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'student_home.html')); // 返回學生主頁
+    // 將路由直接導向 student_home.ejs
+    res.render('student_home');
 });
 
 // API: 處理登入
