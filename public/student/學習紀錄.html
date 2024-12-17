@@ -147,19 +147,37 @@
 </div>
 
 <script>
-  // 固定的功能標籤：GPT-API-FUNCTION
-  let currentPage = 0;
+  const userID = new URLSearchParams(window.location.search).get('userID'); // 取得用戶ID
   const textDisplay = document.getElementById('text-display');
-  const pages = [
-    "這是第一頁的對話內容。",
-    "這是第二頁的對話內容。",
-    "這是第三頁的對話內容。"
-  ];
+  let currentPage = 0;
+  let pages = [];
 
+  // 更新頁面內容
   function updatePage() {
-    textDisplay.textContent = pages[currentPage] || "目前無更多內容。";
+    if (pages[currentPage]) {
+      textDisplay.textContent = pages[currentPage];
+    } else {
+      textDisplay.textContent = "目前無更多內容。";
+    }
   }
 
+  // 初始化數據
+  async function initialize() {
+    try {
+      const response = await fetch(`/api/getLearningRecords?userID=${userID}`);
+      if (!response.ok) {
+        throw new Error("無法加載數據");
+      }
+      const data = await response.json();
+      pages = data.records || ["目前無可用內容。"];
+      updatePage();
+    } catch (error) {
+      console.error("加載數據失敗：", error);
+      textDisplay.textContent = "加載數據失敗，請稍後再試。";
+    }
+  }
+
+  // 導航按鈕
   document.getElementById('prev-page').addEventListener('click', () => {
     if (currentPage > 0) {
       currentPage--;
@@ -174,8 +192,8 @@
     }
   });
 
-  // 初始顯示第一頁內容
-  updatePage();
+  // 初始化頁面
+  initialize();
 </script>
 </body>
 </html>
