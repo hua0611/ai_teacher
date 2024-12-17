@@ -5,10 +5,31 @@ const session = require('express-session');
 const app = express();
 
 const chatRecordsFile = path.join(__dirname, 'chatRecords.json');
+const usersFile = path.join(__dirname, 'users.json'); // 用於存放用戶資料
 
 // 檢查或初始化 chatRecords.json
 if (!fs.existsSync(chatRecordsFile)) {
     fs.writeFileSync(chatRecordsFile, JSON.stringify({}, null, 2));
+}
+
+// 檢查或初始化 users.json
+if (!fs.existsSync(usersFile)) {
+    fs.writeFileSync(usersFile, JSON.stringify([
+        {
+            username: 'student1',
+            password: '123456',
+            userID: 'stu123',
+            userType: 'student',
+            displayName: '學生A',
+        },
+        {
+            username: 'teacher1',
+            password: '654321',
+            userID: 'tea123',
+            userType: 'teacher',
+            displayName: '老師B',
+        }
+    ], null, 2));
 }
 
 // 設定靜態資源
@@ -37,6 +58,31 @@ function authenticateStudent(req, res, next) {
 // 根路由：返回學習檔案頁面
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', '學習檔案.html')); // 返回學習檔案頁面
+});
+
+// API: 處理使用者登入
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
+
+    // 讀取用戶資料
+    fs.readFile(usersFile, 'utf8', (err, data) => {
+        if (err) {
+            console.error('讀取用戶檔案失敗:', err);
+            return res.status(500).json({ success: false, message: '伺服器錯誤' });
+        }
+
+        const users = JSON.parse(data);
+        const user = users.find(u => u.username === username && u.password === password);
+
+        if (!user) {
+            return res.status(401).json({ success: false, message: '帳號或密碼錯誤' });
+        }
+
+        // 保存用戶資訊到 Session
+        req.session.user = user;
+
+        res.json({ success: true, userType: user.userType });
+    });
 });
 
 // API: 取得學生對話紀錄
