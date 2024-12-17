@@ -11,6 +11,21 @@ if (!fs.existsSync(chatRecordsFile)) {
     fs.writeFileSync(chatRecordsFile, JSON.stringify({}, null, 2));
 }
 
+// 設定靜態資源
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 使用 JSON Body 解析中間件
+app.use(express.json());
+
+// 設定 Session
+app.use(
+    session({
+        secret: 'your-secret-key',
+        resave: false,
+        saveUninitialized: true,
+    })
+);
+
 // 中間件函數：驗證學生身份
 function authenticateStudent(req, res, next) {
     if (!req.session.user || req.session.user.userType !== 'student') {
@@ -18,6 +33,11 @@ function authenticateStudent(req, res, next) {
     }
     next();
 }
+
+// 根路由：返回學習檔案頁面
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', '學習檔案.html')); // 返回學習檔案頁面
+});
 
 // API: 取得學生對話紀錄
 app.get('/api/chatRecords', authenticateStudent, (req, res) => {
@@ -58,7 +78,7 @@ app.post('/api/saveChat', authenticateStudent, (req, res) => {
         records[userID].push({
             role,
             message,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
         });
 
         fs.writeFile(chatRecordsFile, JSON.stringify(records, null, 2), 'utf8', (err) => {
