@@ -2,18 +2,21 @@
   {
     "username": "A",
     "password": "123",
+    "userID": "stu123",
     "userType": "student",
     "displayName": "小明"
   },
   {
     "username": "B",
     "password": "123",
+    "userID": "stu5667",
     "userType": "student",
     "displayName": "小華"
   },
   {
     "username": "1",
     "password": "ABC",
+    "userID": "tea456",
     "userType": "teacher",
     "displayName": "老師王"
   }
