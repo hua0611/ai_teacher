@@ -70,30 +70,30 @@
     background: #FFB74D;
   }
 
-  /* 綠色主畫面區 */
-.green-panel-container {
+ .green-panel-container {
   width: 1080px;
-  height: 670px; /* 調整高度將黑色底部條整合進來 */
+  height: 670px; /* 維持原本的高度 */
   position: absolute;
   left: 304px;
   top: 200px;
   background: #219D50;
-  border-radius: 30px 30px 0 0; /* 上方圓角 */
-  overflow: hidden; 
+  border-radius: 30px 30px 0 0;
+  overflow: hidden;
   padding: 20px;
   box-sizing: border-box;
+  position: relative; /* 關鍵：設定為相對定位 */
 }
 
-/* 黑色底部條 */
 .black-bar {
-  width: 1080px;
+  width: 100%;
   height: 70px;
   background: #2D2926;
   position: absolute;
-  left: 304; /* 左側對齊 */
-  top:800; /* 黏在底部 */
-  border-radius: 0 0 30px 30px; /* 下方圓角 */
+  bottom: 0;
+  left: 0;
+  border-radius: 0 0 30px 30px;
 }
+
 
 
   /* 輸入列樣式 */
