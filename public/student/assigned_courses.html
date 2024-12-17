@@ -28,12 +28,10 @@
     width: 1440px;
     height: 150px;
     position: absolute;
-    left: -1px;
     top: 12px;
     background: #4A90E2;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
-    border: 1px solid black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,19 +44,16 @@
     width: 250px;
     height: 850px;
     position: absolute;
-    left: -1px;
+    left: 0;
     top: 174px;
     background: #5FBCDE;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 31px;
-    border: 1px solid black;
   }
 
   .menu-item {
     width: 216px;
     height: 65px;
     background: #F89729;
-    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
     color: #F4F4F4;
     font-size: 24px;
     text-align: center;
@@ -83,12 +78,9 @@
     top: 200px;
     background: #219D50;
     border-radius: 30px;
-    overflow-y: auto; 
-    position: relative;
+    overflow: hidden; 
     padding: 20px;
     box-sizing: border-box;
-    color: white;
-    font-size: 18px;
   }
 
   /* 黑色底部條 */
@@ -97,31 +89,17 @@
     height: 70px;
     background: #2D2926;
     position: absolute;
-    bottom: 0;
+    bottom: 60px;
     left: 304px;
     border-radius: 0 0 30px 30px;
-  }
-
-  .chat-message {
-    margin-bottom: 10px;
-    font-size: 16px;
-    background: white;
-    color: black;
-    padding: 10px;
-    border-radius: 10px;
-  }
-
-  .chat-message.user {
-    text-align: right;
-    background: #D9F2D9;
   }
 
   /* 輸入區樣式 */
   .input-bar {
     position: absolute;
     bottom: 10px;
-    left: 40px;
-    right: 40px;
+    left: 304px;
+    width: 1080px;
     height: 50px;
     display: flex;
     align-items: center;
@@ -133,16 +111,17 @@
   }
 
   .bottom-img {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 10px;
-    background: #CCC;
+    background: #FFF;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     margin-right: 10px;
     flex-shrink: 0;
+    border: 1px solid #CCC;
   }
 
   .bottom-img img {
@@ -157,20 +136,24 @@
     outline: none;
     font-size: 18px;
     background: transparent;
+    padding-left: 5px;
   }
 
   .footer-button {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background: #5FBCDE;
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 14px;
-    color: black;
-    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: white;
     flex-shrink: 0;
   }
+
 </style>
 </head>
 <body>
@@ -187,55 +170,40 @@
     <a href="./assigned_courses.html" class="menu-item">老師指定課程</a>
   </div>
 
-  <!-- Green Panel with Black Bar -->
-  <div class="green-panel-container" id="chatDisplay">
-    <div class="chat-message" id="instructionMessage">等待老師指令...</div>
+  <!-- Green Panel -->
+  <div class="green-panel-container">
+    <div class="chat-display" id="chatDisplay">
+      <div class="chat-message">等待老師指令...</div>
+    </div>
   </div>
+
+  <!-- 黑色底部條 -->
   <div class="black-bar"></div>
 
+  <!-- Input Bar -->
   <div class="input-bar">
     <div class="bottom-img" id="cameraButton">
       <img src="/images/camera.png" alt="Camera Icon">
     </div>
-    <input class="footer-input" id="chatInput" type="text" placeholder="輸入指令或問題...">
-    <button class="footer-button" id="sendButton">▶</button>
     <input type="file" id="fileInput" accept="image/*" style="display: none;">
+    <input class="footer-input" id="chatInput" type="text" placeholder="輸入您的問題...">
+    <button class="footer-button" id="sendButton">▶</button>
   </div>
 </div>
 
 <script>
   const chatDisplay = document.getElementById('chatDisplay');
-  const instructionMessage = document.getElementById('instructionMessage');
   const chatInput = document.getElementById('chatInput');
   const sendButton = document.getElementById('sendButton');
   const cameraButton = document.getElementById('cameraButton');
   const fileInput = document.getElementById('fileInput');
 
-  sendButton.addEventListener('click', async () => {
+  sendButton.addEventListener('click', () => {
     const userMessage = chatInput.value.trim();
-    if (!userMessage) {
-      alert('請輸入內容！');
-      return;
-    }
-
-    chatDisplay.innerHTML += `<div class="chat-message user">${userMessage}</div>`;
-    chatInput.value = '';
-
-    try {
-      const response = await fetch('/api/send-instruction', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ instruction: userMessage }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        instructionMessage.textContent = `最新指令：${userMessage}`;
-      } else {
-        alert('發送失敗！');
-      }
-    } catch (error) {
-      console.error('API 請求失敗：', error);
+    if (userMessage) {
+      chatDisplay.innerHTML += `<div class="chat-message">${userMessage}</div>`;
+      chatInput.value = '';
+      chatDisplay.scrollTop = chatDisplay.scrollHeight;
     }
   });
 
@@ -247,29 +215,16 @@
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = function (e) {
+      reader.onload = (e) => {
         chatDisplay.innerHTML += `
-          <div class="chat-message user">
-            <img src="${e.target.result}" alt="Selected Image" style="max-width: 100%; border-radius: 10px;">
+          <div class="chat-message">
+            <img src="${e.target.result}" alt="Uploaded Image" style="max-width: 100%; border-radius: 10px;">
           </div>`;
+        chatDisplay.scrollTop = chatDisplay.scrollHeight;
       };
       reader.readAsDataURL(file);
     }
   });
-
-  async function fetchInstruction() {
-    try {
-      const response = await fetch('/api/get-instruction');
-      const data = await response.json();
-      if (data.success && data.instruction) {
-        instructionMessage.textContent = `最新指令：${data.instruction}`;
-      }
-    } catch (error) {
-      console.error('獲取指令失敗：', error);
-    }
-  }
-
-  setInterval(fetchInstruction, 5000);
 </script>
 </body>
 </html>
