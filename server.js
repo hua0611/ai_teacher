@@ -40,18 +40,21 @@ app.use(
     })
 );
 
-// 根路由：返回學習檔案
+// 根路由：顯示學習檔案頁面 (已改為 EJS)
 app.get('/', (req, res) => {
-    // 若需要使用 EJS，請將學習檔案也轉換成 ejs
-    // 否則可繼續使用原始 HTML 檔案:
-    res.sendFile(path.join(__dirname, 'public', '學習檔案.html'));
+    // 原本是 sendFile('學習檔案.html')，現在改為使用 EJS 模板
+    res.render('學習檔案');
 });
 
-// 學生主頁路由：使用 EJS 模板
+// 學生主頁路由：使用 EJS 模板 (原 student_home.html -> student_home.ejs)
 app.get('/student/', (req, res) => {
-    // 將路由直接導向 student_home.ejs
     res.render('student_home');
 });
+
+// (若將來需要教師主頁路由，則同理)
+// app.get('/teacher/', (req, res) => {
+//     res.render('teacher_home');
+// });
 
 // API: 處理登入
 app.post('/api/login', (req, res) => {
