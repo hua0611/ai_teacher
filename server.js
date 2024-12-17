@@ -58,6 +58,15 @@ app.get('/student/', (req, res) => {
     res.render('student_home', { user: req.session.user });
 });
 
+// 教師主頁路由：使用 EJS 模板 (動態)
+app.get('/teacher/', (req, res) => {
+    // 檢查是否已登入且為教師
+    if (!req.session.user || req.session.user.userType !== 'teacher') {
+        return res.redirect('/');
+    }
+    res.render('teacher_home', { user: req.session.user });
+});
+
 // API: 處理登入
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
