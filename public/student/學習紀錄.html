@@ -113,7 +113,12 @@
     cursor: pointer;
   }
 
-  .nav-buttons button:hover {
+  .nav-buttons button:disabled {
+    background: #a5d6a7;
+    cursor: not-allowed;
+  }
+
+  .nav-buttons button:hover:not(:disabled) {
     background: #45a049;
   }
 </style>
@@ -140,36 +145,53 @@
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
-      <button id="prev-page">上一頁</button>
-      <button id="next-page">下一頁</button>
+      <button id="prev-page" disabled>上一頁</button>
+      <button id="next-page" disabled>下一頁</button>
     </div>
   </div>
 </div>
 
 <script>
-  const userID = new URLSearchParams(window.location.search).get('userID'); // 取得用戶ID
   const textDisplay = document.getElementById('text-display');
+  const prevButton = document.getElementById('prev-page');
+  const nextButton = document.getElementById('next-page');
   let currentPage = 0;
   let pages = [];
 
   // 更新頁面內容
   function updatePage() {
     if (pages[currentPage]) {
-      textDisplay.textContent = pages[currentPage];
+      const record = pages[currentPage];
+      textDisplay.textContent = `[${record.role === 'user' ? '學生' : 'AI'}] ${record.message} (${new Date(record.timestamp).toLocaleString()})`;
     } else {
       textDisplay.textContent = "目前無更多內容。";
     }
+
+    // 更新按鈕狀態
+    prevButton.disabled = currentPage === 0;
+    nextButton.disabled = currentPage === pages.length - 1;
   }
 
   // 初始化數據
   async function initialize() {
     try {
-      const response = await fetch(`/api/getLearningRecords?userID=${userID}`);
+      const response = await fetch(`/api/chatRecords`, {
+        headers: {
+          'x-api-key': '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'
+        }
+      });
+
       if (!response.ok) {
         throw new Error("無法加載數據");
       }
+
       const data = await response.json();
-      pages = data.records || ["目前無可用內容。"];
+      if (data.records.length === 0) {
+        textDisplay.textContent = "目前無對話紀錄。";
+        return;
+      }
+
+      pages = data.records;
       updatePage();
     } catch (error) {
       console.error("加載數據失敗：", error);
@@ -178,14 +200,14 @@
   }
 
   // 導航按鈕
-  document.getElementById('prev-page').addEventListener('click', () => {
+  prevButton.addEventListener('click', () => {
     if (currentPage > 0) {
       currentPage--;
       updatePage();
     }
   });
 
-  document.getElementById('next-page').addEventListener('click', () => {
+  nextButton.addEventListener('click', () => {
     if (currentPage < pages.length - 1) {
       currentPage++;
       updatePage();
