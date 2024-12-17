@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>學生首頁</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval';">
     <style>
         body, html {
             margin: 0;
@@ -12,85 +11,95 @@
             font-family: Inter, sans-serif;
             background: #f0f0f0;
         }
+
         .page-container {
             width: 1440px;
             height: 1024px;
             position: relative;
             background: white;
             margin: 0 auto;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
-        .sidebar-bg {
-            width: 250px;
-            height: 850px;
-            position: absolute;
-            left: -1px;
-            top: 174px;
-            background: #5FBCDE;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-            border-radius: 31px;
-            border: 1px solid black;
-        }
-        .top-bar {
-            width: 1440px;
+
+        .header {
+            width: 100%;
             height: 150px;
-            position: absolute;
-            left: -1px;
-            top: 12px;
             background: #4A90E2;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             border-radius: 20px;
-            border: 1px solid black;
-        }
-        .title-text {
-            position: absolute;
-            left: 48px;
-            top: 77px;
-            color: black;
+            display: flex;
+            align-items: center;
+            padding-left: 48px;
             font-size: 32px;
-            font-weight: 400;
+            color: black;
         }
-        .color-box {
+
+        .sidebar {
+            width: 250px;
+            height: calc(100% - 150px);
+            position: absolute;
+            left: 0;
+            top: 150px;
+            background: #5FBCDE;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 31px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+            gap: 20px;
+        }
+
+        .menu-item {
             width: 216px;
             height: 65px;
-            position: absolute;
+            background: #F89729;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            color: #F4F4F4;
+            font-size: 24px;
             text-align: center;
             line-height: 65px;
-            font-size: 32px;
-            color: #F4F4F4;
             border-radius: 10px;
-            cursor: pointer;
             text-decoration: none;
+            cursor: pointer;
         }
-        .color-box:hover {
+
+        .menu-item:hover {
             background: #FFB74D;
         }
-        .orange-box1 { left: 8px; top: 805px; background: #F89729; }
-        .orange-box2 { left: 12px; top: 668px; background: #F89729; }
-        .orange-box3 { left: 12px; top: 384px; background: #F89729; }
-        .orange-box4 { left: 12px; top: 518px; background: #F89729; }
-        .orange-box5 { left: 12px; top: 252px; background: #F89729; }
 
-        .task-panel {
+        .content-area {
             width: 1080px;
-            height: 721px;
+            height: calc(100% - 150px);
             position: absolute;
-            left: 304px;
-            top: 222px;
+            left: 280px;
+            top: 150px;
             background: #D9D9D9;
             border-radius: 30px;
             padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .task-panel-title {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 15px;
+        .text-display {
+            flex: 1;
+            overflow-y: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-input-area {
+            margin-top: 20px;
         }
 
         .task-input {
             width: 100%;
-            height: 85%;
+            height: 100px;
             padding: 10px;
             font-size: 18px;
             border: 1px solid #ccc;
@@ -109,6 +118,7 @@
             border-radius: 10px;
             cursor: pointer;
         }
+
         .save-button:hover {
             background-color: #45A049;
         }
@@ -116,43 +126,44 @@
 </head>
 <body>
 <div class="page-container">
-    <!-- Sidebar -->
-    <div class="sidebar-bg"></div>
-
     <!-- Header -->
-    <div class="top-bar"></div>
-    <div class="title-text">歡迎，<span id="userName"><%= user.displayName %></span></div>
+    <div class="header">歡迎，<span id="userName"><%= user.displayName %></span></div>
 
-    <!-- Menu items -->
-    <!-- 將 userID 帶入連結中 -->
-    <a href="./學習紀錄.html?userID=<%= userID %>" class="color-box orange-box5">學習紀錄</a>
-    <a href="./ai.html?userID=<%= userID %>" class="color-box orange-box3">家教 AI</a>
-    <a href="./notes.html?userID=<%= userID %>" class="color-box orange-box4">個人化筆記</a>
-    <a href="./assigned_courses.html?userID=<%= userID %>" class="color-box orange-box2">老師指定課程</a>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="./學習紀錄.html" class="menu-item">學習紀錄</a>
+        <a href="./ai.html" class="menu-item">家教 AI</a>
+        <a href="./notes.html" class="menu-item">個人化筆記</a>
+        <a href="./assigned_courses.html" class="menu-item">老師指定課程</a>
+    </div>
 
-    <!-- Task Panel -->
-    <div class="task-panel">
-        <div class="task-panel-title">完成事項</div>
-        <textarea class="task-input" id="taskInput" placeholder="輸入完成事項..."></textarea>
-        <button class="save-button" id="saveTaskButton">儲存</button>
+    <!-- Main Content Area -->
+    <div class="content-area">
+        <!-- Text Display Area -->
+        <div class="text-display" id="text-display">
+            歡迎來到學習紀錄！這裡是您的任務清單。
+        </div>
+
+        <!-- Task Input and Save Button -->
+        <div class="task-input-area">
+            <textarea class="task-input" id="taskInput" placeholder="輸入完成事項..."></textarea>
+            <button class="save-button" id="saveTaskButton">儲存</button>
+        </div>
     </div>
 </div>
 
 <script>
-    // 從網址中取得 userID
     const userID = new URLSearchParams(window.location.search).get('userID');
     const taskInput = document.getElementById('taskInput');
     const userName = document.getElementById('userName');
 
     document.addEventListener("DOMContentLoaded", async () => {
         try {
-            // 您可以在這裡根據 userID 從後端 fetch 該使用者的任務資料
-            // 假設有個 API /api/userTasks?userID=xxx 回傳該使用者的資料
-            const res = await fetch(`/api/userTasks?userID=${encodeURIComponent(userID)}`);
-            const data = await res.json();
+            const response = await fetch(`/api/userTasks?userID=${encodeURIComponent(userID)}`);
+            const data = await response.json();
             if (data.success) {
                 userName.textContent = data.user.displayName;
-                taskInput.value = data.userTasks;
+                taskInput.value = data.tasks || '';
             } else {
                 console.error("無法取得使用者資料");
             }
@@ -161,17 +172,15 @@
         }
     });
 
-    // 儲存完成事項
     document.getElementById('saveTaskButton').addEventListener('click', async () => {
         try {
             const tasks = taskInput.value;
-            // 向後端送出更新請求
-            const res = await fetch('/api/saveUserTasks', {
+            const response = await fetch('/api/saveUserTasks', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userID, tasks })
             });
-            const data = await res.json();
+            const data = await response.json();
             if (data.success) {
                 alert('完成事項已儲存！');
             } else {
