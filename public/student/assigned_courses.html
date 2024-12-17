@@ -70,13 +70,13 @@
 
   .green-panel-container {
     width: 1080px;
-    height: 600px;
+    height: 600px; 
     position: absolute;
     left: 304px;
     top: 200px;
     background: #219D50;
-    border-radius: 30px 30px 0 0; /* 上半部圓角 */
-    position: relative; 
+    border-radius: 30px 30px 0 0; /* 上圓角 */
+    position: relative;
     overflow: hidden;
     padding: 0;
     box-sizing: border-box;
@@ -84,7 +84,7 @@
 
   .chat-display {
     width: 100%;
-    height: calc(100% - 70px); /* 預留給黑色條的位置 */
+    height: calc(100% - 70px);
     overflow-y: auto;
     padding: 20px;
     box-sizing: border-box;
@@ -107,13 +107,13 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    border-radius: 0 0 30px 30px; /* 下半部圓角 */
+    border-radius: 0 0 30px 30px; /* 下圓角 */
   }
 
   .input-bar {
     position: absolute;
     left: 304px;
-    top: 800px; /* 根據實際需求微調此數值，使輸入欄位緊貼黑色條下方 */
+    top: 820px; /* 往下移20px，嘗試接近您想要的效果 */
     width: 1080px;
     height: 50px;
     display: flex;
@@ -123,7 +123,9 @@
     padding: 0 10px;
     box-sizing: border-box;
     z-index: 10;
-    border: 1px solid #CCC;
+    /* 移除邊框以與AI家教更相似 */
+    border: none;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.15);
   }
 
   .bottom-img {
@@ -177,9 +179,9 @@
   <div class="top-bar">老師指定教學</div>
 
   <!-- Sidebar -->
-
-  <div class="sidebar">
-    <a href="./學習紀錄.html" class="menu-item">學習檔案</a>
+  <div class="sidebar-bg"></div>
+  <div style="position:absolute; top:252px; left:12px;">
+    <a href="./學習檔案.html" class="menu-item">學習檔案</a>
     <a href="./ai.html" class="menu-item">家教 AI</a>
     <a href="./notes.html" class="menu-item">個人化筆記</a>
     <a href="./assigned_courses.html" class="menu-item">老師指定課程</a>
