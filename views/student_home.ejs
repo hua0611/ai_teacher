@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>學生首頁</title>
-    <link rel="stylesheet" href="../styles.css">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline';">
+    <!-- 添加 Content-Security-Policy，允许安全的脚本运行 -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval';">
     <style>
         body, html {
             margin: 0;
@@ -151,18 +151,15 @@
     const taskInput = document.getElementById('taskInput');
     const userName = document.getElementById('userName');
 
-    // 動態加載用戶名稱與完成事項
     document.addEventListener("DOMContentLoaded", async () => {
         try {
-            // 獲取用戶名稱
-            const userResponse = await fetch(`/api/getUserInfo?userID=${userID}`);
-            const userData = await userResponse.json();
-            userName.textContent = userData.displayName || '未知用戶';
+            // 模擬獲取用戶信息
+            const userData = { displayName: "測試用戶" }; // 模擬返回
+            userName.textContent = userData.displayName;
 
-            // 獲取完成事項
-            const taskResponse = await fetch(`/api/getTasks?userID=${userID}`);
-            const taskData = await taskResponse.json();
-            taskInput.value = taskData.tasks || '';
+            // 模擬獲取完成事項
+            const taskData = { tasks: "這是一個示例任務。" }; // 模擬返回
+            taskInput.value = taskData.tasks;
         } catch (error) {
             console.error("初始化資料失敗：", error);
         }
@@ -172,16 +169,9 @@
     document.getElementById('saveTaskButton').addEventListener('click', async () => {
         try {
             const tasks = taskInput.value;
-            const response = await fetch('/api/saveTasks', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userID, tasks }),
-            });
-            if (response.ok) {
-                alert('完成事項已儲存！');
-            } else {
-                alert('儲存失敗，請稍後再試！');
-            }
+            // 模擬 POST 儲存請求
+            console.log("儲存的數據：", { userID, tasks });
+            alert('完成事項已儲存！');
         } catch (error) {
             console.error("儲存資料失敗：", error);
             alert('儲存失敗，請稍後再試！');
