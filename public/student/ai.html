@@ -204,9 +204,10 @@
 
     <!-- Input Bar on Black Bar -->
     <div class="input-bar">
-      <div class="bottom-img">
+      <div class="bottom-img" id="cameraButton">
         <img src="/images/camera.png" alt="Camera Icon">
       </div>
+      <input type="file" id="fileInput" accept="image/*" style="display: none;">
       <input class="footer-input" id="chatInput" type="text" placeholder="輸入您的問題...">
       <button class="footer-button" id="sendButton">▶</button>
     </div>
@@ -217,6 +218,8 @@
   const chatDisplay = document.getElementById('chatDisplay');
   const chatInput = document.getElementById('chatInput');
   const sendButton = document.getElementById('sendButton');
+  const cameraButton = document.getElementById('cameraButton');
+  const fileInput = document.getElementById('fileInput');
 
   // 固定的 API 金鑰（請自行替換為您的 key）
   const API_KEY = "your-api-key";
@@ -252,6 +255,27 @@
     }
 
     chatDisplay.scrollTop = chatDisplay.scrollHeight;
+  });
+
+  // 點擊相機圖案觸發檔案選擇器
+  cameraButton.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  // 處理選擇的照片
+  fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        chatDisplay.innerHTML += `
+          <div class="chat-message user">
+            <img src="${e.target.result}" alt="Selected Image" style="max-width: 100%; border-radius: 10px;">
+          </div>`;
+        chatDisplay.scrollTop = chatDisplay.scrollHeight;
+      };
+      reader.readAsDataURL(file);
+    }
   });
 </script>
 </body>
