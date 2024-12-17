@@ -80,8 +80,9 @@
     top: 170px;
     background: #219D50;
     border-radius: 30px;
-    overflow: hidden; /* 確保黑色區塊的圓角一致 */
-    position: relative;
+    padding: 20px;
+    color: white;
+    font-size: 20px;
   }
 
   .black-bar {
@@ -91,6 +92,14 @@
     position: absolute;
     bottom: 0;
     left: 0;
+  }
+
+  .api-info {
+    margin-top: 30px;
+    font-size: 18px;
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
   }
 
   .bottom-panel-container {
@@ -154,8 +163,8 @@
     justify-content: center;
     overflow: hidden;
     position: absolute;
-    left: -60px; /* 左移到白框外 */
-    top: 7px;    /* 垂直居中灰框 */
+    left: -60px;
+    top: 7px;
   }
 
   .bottom-img img {
@@ -169,7 +178,7 @@
 <body>
 <div class="page-container">
   <!-- Header -->
-  <div class="header">家教 AI</div>
+  <div class="header">家教 AI - 歡迎，<span id="username">載入中...</span></div>
 
   <!-- Sidebar -->
   <div class="sidebar">
@@ -181,6 +190,10 @@
 
   <!-- Green Panel with Black Bar -->
   <div class="green-panel-container">
+    <div>API 金鑰資訊：</div>
+    <div class="api-info">
+      API 金鑰：<span id="apiKey">載入中...</span>
+    </div>
     <div class="black-bar"></div>
   </div>
 
@@ -198,5 +211,22 @@
     </div>
   </div>
 </div>
+
+<script>
+  // 固定的 API 金鑰
+  const fixedApiKey = "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";
+
+  // 根據 URL 區分使用者
+  const userID = new URLSearchParams(window.location.search).get('userID') || '未知使用者';
+
+  // 動態更新頁面
+  document.addEventListener("DOMContentLoaded", () => {
+    // 顯示用戶名稱
+    document.getElementById('username').textContent = userID;
+
+    // 顯示 API 金鑰
+    document.getElementById('apiKey').textContent = fixedApiKey;
+  });
+</script>
 </body>
 </html>
