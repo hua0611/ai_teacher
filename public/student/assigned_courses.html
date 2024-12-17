@@ -93,12 +93,13 @@
 
   /* 黑色底部條 */
   .black-bar {
-    width: 100%;
+    width: 1080px;
     height: 70px;
     background: #2D2926;
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: 304px;
+    border-radius: 0 0 30px 30px;
   }
 
   .chat-message {
@@ -115,6 +116,7 @@
     background: #D9F2D9;
   }
 
+  /* 輸入區樣式 */
   .input-bar {
     position: absolute;
     bottom: 10px;
@@ -127,6 +129,7 @@
     border-radius: 30px;
     padding: 0 10px;
     box-sizing: border-box;
+    z-index: 10;
   }
 
   .bottom-img {
@@ -188,13 +191,14 @@
   <div class="green-panel-container" id="chatDisplay">
     <div class="chat-message" id="instructionMessage">等待老師指令...</div>
   </div>
+  <div class="black-bar"></div>
 
   <div class="input-bar">
     <div class="bottom-img" id="cameraButton">
       <img src="/images/camera.png" alt="Camera Icon">
     </div>
     <input class="footer-input" id="chatInput" type="text" placeholder="輸入指令或問題...">
-    <button class="footer-button" id="sendButton">Send</button>
+    <button class="footer-button" id="sendButton">▶</button>
     <input type="file" id="fileInput" accept="image/*" style="display: none;">
   </div>
 </div>
