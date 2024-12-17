@@ -23,7 +23,6 @@
     border-radius: 10px;
   }
 
-  /* 頂部藍色標題列 */
   .top-bar {
     width: 1440px;
     height: 150px;
@@ -39,7 +38,6 @@
     color: black;
   }
 
-  /* 左側藍色側邊欄 */
   .sidebar-bg {
     width: 250px;
     height: 850px;
@@ -70,37 +68,52 @@
     background: #FFB74D;
   }
 
- .green-panel-container {
-  width: 1080px;
-  height: 600px; /* 根據需要調整高度以符合您的設計 */
-  position: absolute;
-  left: 304px;
-  top: 200px;
-  background: #219D50;
-  border-radius: 30px 30px 0 0;
-  position: relative; /* 相對定位，讓子元素以這塊為參考 */
-  overflow: hidden;
-  padding: 0; /* 將 padding 設為 0，避免內部有多餘空間 */
-}
+  .green-panel-container {
+    width: 1080px;
+    height: 600px; 
+    position: absolute;
+    left: 304px;
+    top: 200px;
+    background: #219D50;
+    border-radius: 30px 30px 0 0;
+    position: relative; 
+    overflow: hidden;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-.black-bar {
-  width: 100%;
-  height: 70px;
-  background: #2D2926;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  border-radius: 0 0 30px 30px;
-}
+  .chat-display {
+    width: 100%;
+    height: calc(100% - 70px); /* 預留給黑色條的位置 */
+    overflow-y: auto;
+    padding: 20px; /* 如果需要內部有點間距 */
+    box-sizing: border-box;
+  }
 
+  .chat-message {
+    margin-bottom: 10px;
+    font-size: 16px;
+    background: white;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 80%;
+  }
 
+  .black-bar {
+    width: 100%;
+    height: 70px;
+    background: #2D2926;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-radius: 0 0 30px 30px;
+  }
 
-
-  /* 輸入列樣式 */
   .input-bar {
     position: absolute;
-    bottom: 10px;
     left: 304px;
+    top: 800px; /* 根據實際需求調整位置，使輸入欄位緊貼黑色條下方 */
     width: 1080px;
     height: 50px;
     display: flex;
@@ -178,12 +191,10 @@
     <div class="chat-display" id="chatDisplay">
       <div class="chat-message">歡迎使用家教 AI！</div>
     </div>
+    <div class="black-bar"></div>
   </div>
 
-  <!-- 黑色底部條 -->
-  <div class="black-bar"></div>
-
-  <!-- Input Bar -->
+  <!-- Input Bar (獨立在綠色區塊與黑色條外) -->
   <div class="input-bar">
     <div class="bottom-img" id="cameraButton">
       <img src="/images/camera.png" alt="Camera Icon">
