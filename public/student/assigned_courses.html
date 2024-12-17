@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>老師指定課程</title>
+<title>老師指定教學</title>
 <style>
   body, html {
     margin: 0;
@@ -34,7 +34,7 @@
     align-items: center;
     justify-content: center;
     font-size: 32px;
-    color: black;
+    color: white;
   }
 
   .sidebar {
@@ -83,23 +83,21 @@
     padding: 20px;
     color: white;
     font-size: 20px;
+    overflow-y: auto;
   }
 
-  .black-bar {
-    width: 100%;
-    height: 70px;
-    background: #2D2926;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
-
-  .api-info {
-    margin-top: 30px;
+  .chat-message {
+    margin-bottom: 10px;
     font-size: 18px;
-    background: #333;
-    padding: 20px;
+    background: white;
+    color: black;
+    padding: 10px;
     border-radius: 10px;
+  }
+
+  .chat-message.user {
+    text-align: right;
+    background: #D9F2D9;
   }
 
   .bottom-panel-container {
@@ -153,34 +151,12 @@
     font-size: 16px;
     color: black;
   }
-
-  .bottom-img {
-    width: 50px;
-    height: 57px;
-    border-radius: 10px;
-    background: #CCC;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: absolute;
-    left: -50px; /* 調整左移到白框外 */
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .bottom-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
 </style>
 </head>
 <body>
 <div class="page-container">
   <!-- Header -->
-  <div class="header">老師指定課程 - 歡迎，<span id="username">載入中...</span></div>
+  <div class="header">老師指定教學</div>
 
   <!-- Sidebar -->
   <div class="sidebar">
@@ -190,25 +166,17 @@
     <a href="./assigned_courses.html" class="menu-item">老師指定課程</a>
   </div>
 
-  <!-- Green Panel with Black Bar -->
-  <div class="green-panel-container">
-    <div>API 金鑰資訊：</div>
-    <div class="api-info">
-      API 金鑰：<span id="apiKey">載入中...</span>
-    </div>
-    <div class="black-bar"></div>
+  <!-- Chat Display Area -->
+  <div class="green-panel-container" id="chatDisplay">
+    <div class="chat-message">歡迎使用家教 AI！</div>
   </div>
 
   <!-- Footer -->
   <div class="bottom-panel-container">
     <div class="grey-bg">
       <div class="white-bar">
-        <!-- 相機圖標 -->
-        <div class="bottom-img">
-          <img src="/images/camera.png" alt="Camera Icon">
-        </div>
-        <input class="footer-input" type="text" placeholder="輸入文字...">
-        <button class="footer-button">Send</button>
+        <input class="footer-input" id="chatInput" type="text" placeholder="輸入您的問題...">
+        <button class="footer-button" id="sendButton">Send</button>
       </div>
     </div>
   </div>
@@ -216,18 +184,50 @@
 
 <script>
   // 固定的 API 金鑰
-  const fixedApiKey = "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";
+  const API_KEY = "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";
 
-  // 根據 URL 區分使用者
-  const userID = new URLSearchParams(window.location.search).get('userID') || '未知使用者';
+  const chatDisplay = document.getElementById('chatDisplay');
+  const chatInput = document.getElementById('chatInput');
+  const sendButton = document.getElementById('sendButton');
 
-  // 動態更新頁面
-  document.addEventListener("DOMContentLoaded", () => {
-    // 顯示用戶名稱
-    document.getElementById('username').textContent = userID;
+  // 發送訊息
+  sendButton.addEventListener('click', async () => {
+    const userMessage = chatInput.value.trim();
+    if (!userMessage) {
+      alert('請輸入問題！');
+      return;
+    }
 
-    // 顯示 API 金鑰
-    document.getElementById('apiKey').textContent = fixedApiKey;
+    // 顯示用戶訊息
+    chatDisplay.innerHTML += `<div class="chat-message user">${userMessage}</div>`;
+    chatInput.value = '';
+
+    try {
+      // 發送 API 請求
+      const response = await fetch('https://api.openai.com/v1/engines/davinci/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${API_KEY}`
+        },
+        body: JSON.stringify({
+          prompt: userMessage,
+          max_tokens: 150
+        })
+      });
+
+      const data = await response.json();
+      const aiMessage = data.choices?.[0]?.text || "抱歉，我無法回答您的問題。";
+
+      // 顯示 AI 回應
+      chatDisplay.innerHTML += `<div class="chat-message">${aiMessage}</div>`;
+    } catch (error) {
+      console.error('與 API 通訊失敗：', error);
+      chatDisplay.innerHTML += `<div class="chat-message">抱歉，目前無法處理您的請求。</div>`;
+    }
+
+    // 滾動到底部
+    chatDisplay.scrollTop = chatDisplay.scrollHeight;
   });
 </script>
 </body>
