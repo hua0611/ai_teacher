@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>學生首頁</title>
-    <!-- 添加 Content-Security-Policy，允许安全的脚本运行 -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval';">
     <style>
         body, html {
@@ -13,7 +12,6 @@
             font-family: Inter, sans-serif;
             background: #f0f0f0;
         }
-
         .page-container {
             width: 1440px;
             height: 1024px;
@@ -21,7 +19,6 @@
             background: white;
             margin: 0 auto;
         }
-
         .sidebar-bg {
             width: 250px;
             height: 850px;
@@ -33,7 +30,6 @@
             border-radius: 31px;
             border: 1px solid black;
         }
-
         .top-bar {
             width: 1440px;
             height: 150px;
@@ -45,7 +41,6 @@
             border-radius: 20px;
             border: 1px solid black;
         }
-
         .title-text {
             position: absolute;
             left: 48px;
@@ -54,7 +49,6 @@
             font-size: 32px;
             font-weight: 400;
         }
-
         .color-box {
             width: 216px;
             height: 65px;
@@ -68,11 +62,9 @@
             cursor: pointer;
             text-decoration: none;
         }
-
         .color-box:hover {
             background: #FFB74D;
         }
-
         .orange-box1 { left: 8px; top: 805px; background: #F89729; }
         .orange-box2 { left: 12px; top: 668px; background: #F89729; }
         .orange-box3 { left: 12px; top: 384px; background: #F89729; }
@@ -117,7 +109,6 @@
             border-radius: 10px;
             cursor: pointer;
         }
-
         .save-button:hover {
             background-color: #45A049;
         }
@@ -130,9 +121,10 @@
 
     <!-- Header -->
     <div class="top-bar"></div>
-    <div class="title-text">歡迎，<span id="userName">用戶</span></div>
+    <div class="title-text">歡迎，<span id="userName"><%= user.displayName %></span></div>
 
     <!-- Menu items -->
+    <!-- 將 userID 帶入連結中 -->
     <a href="./學習紀錄.html?userID=<%= userID %>" class="color-box orange-box5">學習紀錄</a>
     <a href="./ai.html?userID=<%= userID %>" class="color-box orange-box3">家教 AI</a>
     <a href="./notes.html?userID=<%= userID %>" class="color-box orange-box4">個人化筆記</a>
@@ -147,19 +139,23 @@
 </div>
 
 <script>
-    const userID = new URLSearchParams(window.location.search).get('userID'); // 獲取用戶 ID
+    // 從網址中取得 userID
+    const userID = new URLSearchParams(window.location.search).get('userID');
     const taskInput = document.getElementById('taskInput');
     const userName = document.getElementById('userName');
 
     document.addEventListener("DOMContentLoaded", async () => {
         try {
-            // 模擬獲取用戶信息
-            const userData = { displayName: "測試用戶" }; // 模擬返回
-            userName.textContent = userData.displayName;
-
-            // 模擬獲取完成事項
-            const taskData = { tasks: "這是一個示例任務。" }; // 模擬返回
-            taskInput.value = taskData.tasks;
+            // 您可以在這裡根據 userID 從後端 fetch 該使用者的任務資料
+            // 假設有個 API /api/userTasks?userID=xxx 回傳該使用者的資料
+            const res = await fetch(`/api/userTasks?userID=${encodeURIComponent(userID)}`);
+            const data = await res.json();
+            if (data.success) {
+                userName.textContent = data.user.displayName;
+                taskInput.value = data.userTasks;
+            } else {
+                console.error("無法取得使用者資料");
+            }
         } catch (error) {
             console.error("初始化資料失敗：", error);
         }
@@ -169,9 +165,18 @@
     document.getElementById('saveTaskButton').addEventListener('click', async () => {
         try {
             const tasks = taskInput.value;
-            // 模擬 POST 儲存請求
-            console.log("儲存的數據：", { userID, tasks });
-            alert('完成事項已儲存！');
+            // 向後端送出更新請求
+            const res = await fetch('/api/saveUserTasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userID, tasks })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('完成事項已儲存！');
+            } else {
+                alert('儲存失敗，請稍後再試！');
+            }
         } catch (error) {
             console.error("儲存資料失敗：", error);
             alert('儲存失敗，請稍後再試！');
