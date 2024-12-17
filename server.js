@@ -12,6 +12,9 @@ app.set('views', path.join(__dirname, 'views'));
 // 讀取 users.json 資料
 const usersFile = path.join(__dirname, 'users.json');
 
+// 用於存儲最新指令
+let latestInstruction = '';
+
 // 中間件
 app.use(express.static('public')); // 配置靜態資源
 app.use(express.json());
@@ -70,6 +73,30 @@ app.get('/teacher', (req, res) => {
 
     const user = req.session.user;
     res.render('teacher_home', { user }); // EJS 渲染教師頁面
+});
+
+// 老師發送指令 API
+app.post('/api/send-instruction', (req, res) => {
+    if (!req.session.user || req.session.user.userType !== 'teacher') {
+        return res.status(403).json({ success: false, message: '未授權操作' });
+    }
+
+    const { instruction } = req.body;
+    if (!instruction) {
+        return res.status(400).json({ success: false, message: '指令內容不可為空' });
+    }
+
+    latestInstruction = instruction; // 保存指令
+    res.json({ success: true, message: '指令已發送' });
+});
+
+// 學生獲取指令 API
+app.get('/api/get-instruction', (req, res) => {
+    if (!req.session.user || req.session.user.userType !== 'student') {
+        return res.status(403).json({ success: false, message: '未授權操作' });
+    }
+
+    res.json({ success: true, instruction: latestInstruction });
 });
 
 // 啟動伺服器
