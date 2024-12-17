@@ -7,6 +7,14 @@ const app = express();
 // 設定 EJS 模板引擎（因為 student_home 需要動態）
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.get('/student/', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/');
+  }
+  // 明確傳入 user 變數給模板
+  res.render('student_home', { user: req.session.user });
+});
+
 
 // 初始化檔案路徑
 const chatRecordsFile = path.join(__dirname, 'chatRecords.json');
