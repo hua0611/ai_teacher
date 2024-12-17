@@ -129,14 +129,13 @@
 
     <!-- Header -->
     <div class="top-bar"></div>
-    <div class="title-text">歡迎，<%= user.displayName %></div>
-
+    <div class="title-text">歡迎，<span id="userName">用戶</span></div>
 
     <!-- Menu items -->
-  <a href="./學習紀錄.html" class="color-box orange-box5">學習紀錄</a>
-  <a href="./ai.html" class="color-box orange-box3">家教 AI</a>
-  <a href="./notes.html" class="color-box orange-box4">個人化筆記</a>
-  <a href="./assigned_courses.html" class="color-box orange-box2">老師指定課程</a>
+    <a href="./學習紀錄.html?userID=<%= userID %>" class="color-box orange-box5">學習紀錄</a>
+    <a href="./ai.html?userID=<%= userID %>" class="color-box orange-box3">家教 AI</a>
+    <a href="./notes.html?userID=<%= userID %>" class="color-box orange-box4">個人化筆記</a>
+    <a href="./assigned_courses.html?userID=<%= userID %>" class="color-box orange-box2">老師指定課程</a>
 
     <!-- Task Panel -->
     <div class="task-panel">
@@ -147,18 +146,45 @@
 </div>
 
 <script>
-    // 取得本地儲存的完成事項
+    const userID = new URLSearchParams(window.location.search).get('userID'); // 獲取用戶 ID
     const taskInput = document.getElementById('taskInput');
-    const savedTasks = localStorage.getItem('tasks');
-    if (savedTasks) {
-        taskInput.value = savedTasks;
-    }
+    const userName = document.getElementById('userName');
 
-    // 儲存完成事項到本地儲存
-    document.getElementById('saveTaskButton').addEventListener('click', () => {
-        const tasks = taskInput.value;
-        localStorage.setItem('tasks', tasks);
-        alert('完成事項已儲存！');
+    // 動態加載用戶名稱與完成事項
+    document.addEventListener("DOMContentLoaded", async () => {
+        try {
+            // 獲取用戶名稱
+            const userResponse = await fetch(`/api/getUserInfo?userID=${userID}`);
+            const userData = await userResponse.json();
+            userName.textContent = userData.displayName || '未知用戶';
+
+            // 獲取完成事項
+            const taskResponse = await fetch(`/api/getTasks?userID=${userID}`);
+            const taskData = await taskResponse.json();
+            taskInput.value = taskData.tasks || '';
+        } catch (error) {
+            console.error("初始化資料失敗：", error);
+        }
+    });
+
+    // 儲存完成事項
+    document.getElementById('saveTaskButton').addEventListener('click', async () => {
+        try {
+            const tasks = taskInput.value;
+            const response = await fetch('/api/saveTasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userID, tasks }),
+            });
+            if (response.ok) {
+                alert('完成事項已儲存！');
+            } else {
+                alert('儲存失敗，請稍後再試！');
+            }
+        } catch (error) {
+            console.error("儲存資料失敗：", error);
+            alert('儲存失敗，請稍後再試！');
+        }
     });
 </script>
 </body>
