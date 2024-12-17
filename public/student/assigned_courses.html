@@ -5,168 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>老師指定教學</title>
 <style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Inter, sans-serif;
-    background: #f0f0f0;
-    height: 100%;
-  }
-
-  .page-container {
-    width: 1440px;
-    height: 100vh;
-    position: relative;
-    background: white;
-    margin: 0 auto;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .header {
-    width: 100%;
-    height: 150px;
-    background: #4A90E2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    color: white;
-    border-radius: 10px 10px 0 0;
-  }
-
-  .content {
-    display: flex;
-    flex: 1;
-  }
-
-  .sidebar {
-    width: 250px;
-    background: #5FBCDE;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 30px;
-    gap: 30px;
-    border-radius: 0 10px 10px 0;
-  }
-
-  .menu-item {
-    width: 216px;
-    height: 65px;
-    background: #F89729;
-    color: white;
-    font-size: 24px;
-    text-align: center;
-    line-height: 65px;
-    border-radius: 10px;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .menu-item:hover {
-    background: #FFB74D;
-  }
-
-  .chat-container {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .green-panel-container {
-    flex: 1;
-    height: 400px; /* 縮小高度 */
-    background: #219D50;
-    border-radius: 10px;
-    padding: 20px;
-    color: white;
-    font-size: 20px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .chat-message {
-    margin-bottom: 10px;
-    font-size: 18px;
-    background: white;
-    color: black;
-    padding: 10px;
-    border-radius: 10px;
-  }
-
-  .chat-message.user {
-    text-align: right;
-    background: #D9F2D9;
-  }
-
-  .bottom-panel-container {
-    width: 100%;
-    height: 100px;
-    background: #2D2926;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    box-sizing: border-box;
-    margin-top: 20px; /* 增加間距 */
-  }
-
-  .white-bar {
-    width: 90%;
-    height: 70px;
-    background: #F4F4F4;
-    border-radius: 30px;
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    box-sizing: border-box;
-    justify-content: space-between;
-  }
-
-  .footer-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 18px;
-    background: transparent;
-    padding: 0 10px;
-  }
-
-  .footer-button {
-    width: 60px;
-    height: 60px;
-    background: #5FBCDE;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
-    color: black;
-  }
-
-  .bottom-img {
-    width: 50px;
-    height: 57px;
-    border-radius: 10px;
-    background: #CCC;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    margin-right: 10px;
-  }
-
-  .bottom-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  /* 样式省略，使用你的样式 */
 </style>
 </head>
 <body>
@@ -186,7 +25,7 @@
     <!-- Chat Display Area -->
     <div class="chat-container">
       <div class="green-panel-container" id="chatDisplay">
-        <div class="chat-message">歡迎使用家教 AI！</div>
+        <div class="chat-message" id="instructionMessage">等待老師指令...</div>
       </div>
 
       <!-- Footer -->
@@ -196,7 +35,7 @@
           <div class="bottom-img">
             <img src="/images/camera.png" alt="Camera Icon">
           </div>
-          <input class="footer-input" id="chatInput" type="text" placeholder="輸入您的問題...">
+          <input class="footer-input" id="chatInput" type="text" placeholder="輸入指令或問題...">
           <button class="footer-button" id="sendButton">Send</button>
         </div>
       </div>
@@ -208,13 +47,15 @@
   const API_KEY = "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";
 
   const chatDisplay = document.getElementById('chatDisplay');
+  const instructionMessage = document.getElementById('instructionMessage');
   const chatInput = document.getElementById('chatInput');
   const sendButton = document.getElementById('sendButton');
 
+  // 發送指令或問題
   sendButton.addEventListener('click', async () => {
     const userMessage = chatInput.value.trim();
     if (!userMessage) {
-      alert('請輸入問題！');
+      alert('請輸入內容！');
       return;
     }
 
@@ -222,28 +63,37 @@
     chatInput.value = '';
 
     try {
-      const response = await fetch('https://api.openai.com/v1/engines/davinci/completions', {
+      const response = await fetch('/api/send-instruction', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({
-          prompt: userMessage,
-          max_tokens: 150
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ instruction: userMessage }),
       });
 
       const data = await response.json();
-      const aiMessage = data.choices?.[0]?.text || "抱歉，我無法回答您的問題。";
-      chatDisplay.innerHTML += `<div class="chat-message">${aiMessage}</div>`;
+      if (data.success) {
+        instructionMessage.textContent = `最新指令：${userMessage}`;
+      } else {
+        alert('發送失敗！');
+      }
     } catch (error) {
       console.error('API 請求失敗：', error);
-      chatDisplay.innerHTML += `<div class="chat-message">抱歉，伺服器錯誤。</div>`;
     }
-
-    chatDisplay.scrollTop = chatDisplay.scrollHeight;
   });
+
+  // 定期獲取最新指令
+  async function fetchInstruction() {
+    try {
+      const response = await fetch('/api/get-instruction');
+      const data = await response.json();
+      if (data.success && data.instruction) {
+        instructionMessage.textContent = `最新指令：${data.instruction}`;
+      }
+    } catch (error) {
+      console.error('獲取指令失敗：', error);
+    }
+  }
+
+  setInterval(fetchInstruction, 5000); // 每5秒獲取一次指令
 </script>
 </body>
 </html>
