@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>老師指定教學</title>
 <style>
- body, html {
+  body, html {
     margin: 0;
     padding: 0;
     font-family: Inter, sans-serif;
@@ -23,87 +23,61 @@
     border-radius: 10px;
   }
 
-  /* 頂部藍色標題列 */
   .top-bar {
-    width: 1440px;
-    height: 150px;
-    position: absolute;
-    left: -1px;
-    top: 12px;
+    width: 100%;
+    height: 120px;
     background: #4A90E2;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-    border: 1px solid black;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
-    color: black;
+    font-size: 28px;
+    color: white;
+    border-radius: 10px 10px 0 0;
   }
 
-  /* 左側藍色側邊欄 */
-  .sidebar-bg {
+  .sidebar {
     width: 250px;
-    height: 850px;
+    height: calc(100% - 120px);
     position: absolute;
-    left: -1px;
-    top: 174px;
+    left: 0;
+    top: 120px;
     background: #5FBCDE;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 31px;
-    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    gap: 20px;
   }
 
   .menu-item {
     width: 216px;
     height: 65px;
     background: #F89729;
-    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
-    color: #F4F4F4;
-    font-size: 24px;
+    color: white;
+    font-size: 20px;
     text-align: center;
     line-height: 65px;
     border-radius: 10px;
     text-decoration: none;
     cursor: pointer;
-    display: block;
-    margin: 20px auto 0 auto;
   }
 
   .menu-item:hover {
     background: #FFB74D;
   }
 
-  /* 綠色主畫面區 */
   .green-panel-container {
     width: 1080px;
     height: 600px;
     position: absolute;
-    left: 304px;
-    top: 200px;
+    left: 280px;
+    top: 160px;
     background: #219D50;
-    border-radius: 30px;
-    overflow: hidden; 
-    position: relative;
+    border-radius: 20px;
     padding: 20px;
-    box-sizing: border-box;
-  }
-
-  /* 黑色底部條 */
-  .black-bar {
-    width: 100%;
-    height: 70px;
-    background: #2D2926;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
-
-  .chat-display {
-    width: 100%;
-    height: calc(100% - 70px);
+    color: white;
+    font-size: 18px;
     overflow-y: auto;
-    box-sizing: border-box;
   }
 
   .chat-message {
@@ -113,57 +87,40 @@
     color: black;
     padding: 10px;
     border-radius: 10px;
-    max-width: 80%;
-    word-break: break-word;
   }
 
   .chat-message.user {
-    background: #D9F2D9;
-    margin-left: auto;
-    margin-right: 0;
     text-align: right;
+    background: #D9F2D9;
   }
 
-  /* 底部輸入列(在黑色bar之上) */
-  .input-bar {
+  .bottom-panel-container {
+    width: 1080px;
+    height: 80px;
     position: absolute;
-    bottom: 10px;
-    left: 40px;
-    right: 40px;
-    height: 50px;
+    left: 280px;
+    top: 800px;
+  }
+
+  .white-bar {
+    width: 850px;
+    height: 60px;
+    background: #F4F4F4;
+    border-radius: 20px;
     display: flex;
     align-items: center;
-    background: #F4F4F4;
-    border-radius: 30px;
     padding: 0 10px;
     box-sizing: border-box;
-  }
-
-  .bottom-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 10px;
-    background: #CCC;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    margin-right: 10px;
-    flex-shrink: 0;
-  }
-
-  .bottom-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    justify-content: space-between;
+    position: relative;
   }
 
   .footer-input {
     flex: 1;
     border: none;
     outline: none;
-    font-size: 18px;
-    background: transparent;
+    font-size: 16px;
+    padding: 0 10px;
   }
 
   .footer-button {
@@ -175,53 +132,59 @@
     cursor: pointer;
     font-size: 14px;
     color: black;
-    margin-left: 10px;
-    flex-shrink: 0;
+  }
+
+  .bottom-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #CCC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-right: 10px;
+  }
+
+  .bottom-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 </style>
 </head>
 <body>
 <div class="page-container">
-  <!-- Header -->
   <div class="top-bar">老師指定教學</div>
 
-  <div class="content">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <a href="./learn_course.html" class="menu-item">學習檔案</a>
-      <a href="./ai.html" class="menu-item">家教 AI</a>
-      <a href="./notes.html" class="menu-item">個人化筆記</a>
-      <a href="./assigned_courses.html" class="menu-item">老師指定課程</a>
-    </div>
+  <div class="sidebar">
+    <a href="./learn_course.html" class="menu-item">學習檔案</a>
+    <a href="./ai.html" class="menu-item">家教 AI</a>
+    <a href="./notes.html" class="menu-item">個人化筆記</a>
+    <a href="./assigned_courses.html" class="menu-item">老師指定課程</a>
+  </div>
 
-    <!-- Chat Display Area -->
-    <div class="green-panel-container" id="chatDisplay">
-      <div class="chat-message" id="instructionMessage">等待老師指令...</div>
-    </div>
+  <div class="green-panel-container" id="chatDisplay">
+    <div class="chat-message" id="instructionMessage">等待老師指令...</div>
+  </div>
 
-    <!-- Footer -->
-    <div class="bottom-panel-container">
-      <div class="white-bar">
-        <!-- 相機圖標 -->
-        <div class="bottom-img">
-          <img src="/images/camera.png" alt="Camera Icon">
-        </div>
-        <input class="footer-input" id="chatInput" type="text" placeholder="輸入指令或問題...">
-        <button class="footer-button" id="sendButton">Send</button>
+  <div class="bottom-panel-container">
+    <div class="white-bar">
+      <div class="bottom-img">
+        <img src="/images/camera.png" alt="Camera Icon">
       </div>
+      <input class="footer-input" id="chatInput" type="text" placeholder="輸入指令或問題...">
+      <button class="footer-button" id="sendButton">Send</button>
     </div>
   </div>
 </div>
 
 <script>
-  const API_KEY = "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";
-
   const chatDisplay = document.getElementById('chatDisplay');
   const instructionMessage = document.getElementById('instructionMessage');
   const chatInput = document.getElementById('chatInput');
   const sendButton = document.getElementById('sendButton');
 
-  // 發送指令或問題
   sendButton.addEventListener('click', async () => {
     const userMessage = chatInput.value.trim();
     if (!userMessage) {
@@ -250,7 +213,6 @@
     }
   });
 
-  // 定期獲取最新指令
   async function fetchInstruction() {
     try {
       const response = await fetch('/api/get-instruction');
@@ -263,7 +225,7 @@
     }
   }
 
-  setInterval(fetchInstruction, 5000); // 每5秒獲取一次指令
+  setInterval(fetchInstruction, 5000);
 </script>
 </body>
 </html>
