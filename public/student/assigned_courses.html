@@ -5,170 +5,171 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>老師指定教學</title>
 <style>
-    body, html {
-  margin: 0;
-  padding: 0;
-  font-family: Inter, sans-serif;
-  background: #f0f0f0;
-  height: 100%;
-}
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Inter, sans-serif;
+    background: #f0f0f0;
+    height: 100%;
+  }
 
-.page-container {
-  width: 1440px;
-  height: 1024px;
-  position: relative;
-  background: white;
-  margin: 0 auto;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
+  .page-container {
+    width: 1440px;
+    height: 1024px;
+    position: relative;
+    background: white;
+    margin: 0 auto;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
 
-.top-bar {
-  width: 1440px;
-  height: 150px;
-  position: absolute;
-  top: 12px;
-  background: #4A90E2;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  color: black;
-}
+  .top-bar {
+    width: 1440px;
+    height: 150px;
+    position: absolute;
+    top: 12px;
+    background: #4A90E2;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: black;
+  }
 
-.sidebar-bg {
-  width: 250px;
-  height: 850px;
-  position: absolute;
-  left: 0;
-  top: 174px;
-  background: #5FBCDE;
-  border-radius: 31px;
-  border: 1px solid black;
-}
+  .sidebar-bg {
+    width: 250px;
+    height: 850px;
+    position: absolute;
+    left: 0;
+    top: 174px;
+    background: #5FBCDE;
+    border-radius: 31px;
+    border: 1px solid black;
+  }
 
-.menu-item {
-  width: 216px;
-  height: 65px;
-  background: #F89729;
-  color: #F4F4F4;
-  font-size: 24px;
-  text-align: center;
-  line-height: 65px;
-  border-radius: 10px;
-  text-decoration: none;
-  cursor: pointer;
-  display: block;
-  margin: 20px auto 0 auto;
-}
+  .menu-item {
+    width: 216px;
+    height: 65px;
+    background: #F89729;
+    color: #F4F4F4;
+    font-size: 24px;
+    text-align: center;
+    line-height: 65px;
+    border-radius: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto 0 auto;
+  }
 
-.menu-item:hover {
-  background: #FFB74D;
-}
+  .menu-item:hover {
+    background: #FFB74D;
+  }
 
-.green-panel-container {
-  width: 1080px;
-  height: 600px;
-  position: absolute;
-  left: 304px;
-  top: 200px;
-  background: #219D50;
-  border-radius: 30px 30px 0 0; /* 上半部圓角 */
-  position: relative; 
-  overflow: hidden;
-  padding: 0; /* 確保內部無多餘填充，讓黑色條貼齊 */
-  box-sizing: border-box;
-}
+  .green-panel-container {
+    width: 1080px;
+    height: 600px;
+    position: absolute;
+    left: 304px;
+    top: 200px;
+    background: #219D50;
+    border-radius: 30px 30px 0 0;
+    position: relative; 
+    overflow: hidden;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-.chat-display {
-  width: 100%;
-  height: calc(100% - 70px); /* 預留給黑色條的位置 */
-  overflow-y: auto;
-  padding: 20px; /* 如果需要内部间距可保留，無則可調整 */
-  box-sizing: border-box;
-}
+  .chat-display {
+    width: 100%;
+    height: calc(100% - 70px);
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+  }
 
-.chat-message {
-  margin-bottom: 10px;
-  font-size: 16px;
-  background: white;
-  color: black;
-  padding: 10px;
-  border-radius: 10px;
-  max-width: 80%;
-}
+  .chat-message {
+    margin-bottom: 10px;
+    font-size: 16px;
+    background: white;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 80%;
+  }
 
-.black-bar {
-  width: 100%;
-  height: 70px;
-  background: #2D2926;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  border-radius: 0 0 30px 30px; /* 下半部圓角 */
-}
+  .black-bar {
+    width: 100%;
+    height: 70px;
+    background: #2D2926;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-radius: 0 0 30px 30px;
+  }
 
-.input-bar {
-  position: absolute;
-  left: 304px;
-  top: 800px; /* 根據實際需求調整位置，使輸入欄位貼在黑色條下方 */
-  width: 1080px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  background: #F4F4F4;
-  border-radius: 30px;
-  padding: 0 10px;
-  box-sizing: border-box;
-  z-index: 10;
-  border: 1px solid #CCC;
-}
+  /* Input bar 下移，讓它在黑色條下方 */
+  .input-bar {
+    position: absolute;
+    left: 304px;
+    top: 800px; /* 根據實際需求微調此數值，使輸入欄位緊貼黑色條下方 */
+    width: 1080px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    background: #F4F4F4;
+    border-radius: 30px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    z-index: 10;
+    border: 1px solid #CCC;
+  }
 
-.bottom-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: #FFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  margin-right: 10px;
-  flex-shrink: 0;
-  border: 1px solid #CCC;
-}
+  .bottom-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #FFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-right: 10px;
+    flex-shrink: 0;
+    border: 1px solid #CCC;
+  }
 
-.bottom-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+  .bottom-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-.footer-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 18px;
-  background: transparent;
-  padding-left: 5px;
-}
+  .footer-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    background: transparent;
+    padding-left: 5px;
+  }
 
-.footer-button {
-  width: 40px;
-  height: 40px;
-  background: #5FBCDE;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  color: white;
-  flex-shrink: 0;
-}
+  .footer-button {
+    width: 40px;
+    height: 40px;
+    background: #5FBCDE;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: white;
+    flex-shrink: 0;
+  }
 
 
 </style>
@@ -181,7 +182,7 @@
   <!-- Sidebar -->
   <div class="sidebar-bg"></div>
   <div style="position:absolute; top:252px; left:12px;">
-    <a href="./learn_course.html" class="menu-item">學習檔案</a>
+    <a href="./學習檔案.html" class="menu-item">學習檔案</a>
     <a href="./ai.html" class="menu-item">家教 AI</a>
     <a href="./notes.html" class="menu-item">個人化筆記</a>
     <a href="./assigned_courses.html" class="menu-item">老師指定課程</a>
