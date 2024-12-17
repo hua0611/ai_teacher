@@ -4,20 +4,20 @@ const express = require('express');
 const session = require('express-session');
 const app = express();
 
-// 設定 EJS 模板引擎
+// 設定 EJS 模板引擎（因為 student_home 需要動態）
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// 初始化所需檔案
+// 初始化檔案路徑
 const chatRecordsFile = path.join(__dirname, 'chatRecords.json');
 const usersFile = path.join(__dirname, 'users.json');
 
-// 檢查或初始化 chatRecords.json
+// 確保 chatRecords.json 存在
 if (!fs.existsSync(chatRecordsFile)) {
     fs.writeFileSync(chatRecordsFile, JSON.stringify({}, null, 2));
 }
 
-// 檢查或初始化 users.json
+// 確保 users.json 存在
 if (!fs.existsSync(usersFile)) {
     fs.writeFileSync(usersFile, JSON.stringify([
         { username: 'student1', password: '123456', userID: 'stu123', userType: 'student', displayName: '學生A' },
@@ -25,7 +25,7 @@ if (!fs.existsSync(usersFile)) {
     ], null, 2));
 }
 
-// 使用靜態資源
+// 使用靜態資源 (將 public 資料夾設為靜態檔案根目錄)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 使用 JSON Body 解析中間件
@@ -40,21 +40,23 @@ app.use(
     })
 );
 
-// 根路由：顯示學習檔案頁面 (已改為 EJS)
+// 根路由：返回學習檔案 (靜態 HTML)
 app.get('/', (req, res) => {
-    // 原本是 sendFile('學習檔案.html')，現在改為使用 EJS 模板
-    res.render('學習檔案');
+    // 假設你的學習檔案.html 位於 public/student 資料夾中
+    res.sendFile(path.join(__dirname, 'public', 'student', '學習檔案.html'));
 });
 
-// 學生主頁路由：使用 EJS 模板 (原 student_home.html -> student_home.ejs)
+// 學生主頁路由：使用 EJS 模板 (動態)
+// 確保 views 中有 student_home.ejs，並使用 res.render() 來渲染
 app.get('/student/', (req, res) => {
-    res.render('student_home');
+    // 這裡使用 EJS 動態模板
+    // 在 student_home.ejs 中可以使用 <%= %> 或 <% %> 插入動態資料
+    res.render('student_home', {
+        // 需要動態資料就傳入此物件
+        userDisplayName: req.session.user ? req.session.user.displayName : "訪客",
+        otherData: "這裡可以傳入其他動態資料"
+    });
 });
-
-// (若將來需要教師主頁路由，則同理)
-// app.get('/teacher/', (req, res) => {
-//     res.render('teacher_home');
-// });
 
 // API: 處理登入
 app.post('/api/login', (req, res) => {
