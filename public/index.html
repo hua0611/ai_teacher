@@ -1,126 +1,199 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登入</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f9f9f9;
-        }
-        .login-container {
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-        }
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:disabled {
-            background-color: #9E9E9E;
-        }
-        .error-message {
-            color: red;
-            font-size: 14px;
-            margin-top: 10px;
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <h1>登入</h1>
-    <div class="login-container">
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="username">帳號：</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">密碼：</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">登入</button>
-            <p class="error-message" id="errorMessage"></p>
-        </form>
-    </div>
+// 環境變數配置
+const API_VERSION = 'v1';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000/api';
 
-    <script>
-        // 監聽登入表單的提交事件
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+// API 端點定義
+const authAPI = {
+    login: `${API_BASE_URL}/auth/login`,
+    logout: `${API_BASE_URL}/auth/logout`,
+    refreshToken: `${API_BASE_URL}/auth/refresh-token`,
+    register: `${API_BASE_URL}/auth/register`
+};
 
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('errorMessage');
-            const loginButton = e.target.querySelector('button');
+const userAPI = {
+    profile: `${API_BASE_URL}/user/profile`,
+    updateProfile: `${API_BASE_URL}/user/profile/update`,
+    changePassword: `${API_BASE_URL}/user/password/change`
+};
 
-            // 清除之前的錯誤訊息
-            errorMessage.style.display = 'none';
-            errorMessage.textContent = '';
+const chatAPI = {
+    getChatHistory: `${API_BASE_URL}/chat/history`,
+    sendMessage: `${API_BASE_URL}/chat/send`,
+    getUnreadCount: `${API_BASE_URL}/chat/unread`
+};
 
-            // 禁用按鈕防止多次提交
-            loginButton.disabled = true;
+// Axios 全局配置
+axios.defaults.baseURL = API_BASE_URL;
+axios.defaults.timeout = 10000;
+axios.defaults.headers.common['Accept'] = 'application/json';
 
-            try {
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
+// Token 相關函數
+function isTokenExpired(token) {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.exp < Date.now() / 1000;
+    } catch (e) {
+        return true;
+    }
+}
 
-                const data = await response.json();
+function logout() {
+    localStorage.removeItem('token');
+    delete axios.defaults.headers.common['Authorization'];
+    window.location.href = '/login';
+}
 
-                if (data.success) {
-                    if (data.userType === 'teacher') {
-                        window.location.href = '/teacher'; // 教師跳轉到教師頁面
-                    } else if (data.userType === 'student') {
-                        window.location.href = '/student'; // 學生跳轉到學生頁面
-                    }
-                } else {
-                    errorMessage.textContent = data.message; // 顯示錯誤訊息
-                    errorMessage.style.display = 'block';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                errorMessage.textContent = '登入過程發生錯誤，請稍後再試';
-                errorMessage.style.display = 'block';
-            } finally {
-                // 恢復按鈕
-                loginButton.disabled = false;
+// Axios 攔截器配置
+axios.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response?.status === 401) {
+            logout();
+        }
+        return Promise.reject(error);
+    }
+);
+
+// API 服務
+const apiService = {
+    async login(username, password) {
+        try {
+            const response = await axios.post(authAPI.login, {
+                username,
+                password
+            });
+            return response.data;
+        } catch (error) {
+            throw this.handleError(error);
+        }
+    },
+
+    async logout() {
+        try {
+            await axios.post(authAPI.logout);
+            logout();
+        } catch (error) {
+            console.error('Logout error:', error);
+            logout();
+        }
+    },
+
+    async getChatHistory(params) {
+        try {
+            const response = await axios.get(chatAPI.getChatHistory, { params });
+            return response.data;
+        } catch (error) {
+            throw this.handleError(error);
+        }
+    },
+
+    handleError(error) {
+        if (error.response) {
+            const status = error.response.status;
+            const messages = {
+                401: '身份驗證失敗，請重新登入',
+                403: '您沒有權限執行此操作',
+                404: '請求的資源不存在',
+                500: '伺服器錯誤，請稍後再試'
+            };
+            throw new Error(messages[status] || error.response.data.message || '發生錯誤，請稍後再試');
+        }
+        throw error;
+    }
+};
+
+// UI 輔助函數
+function showLoading() {
+    const loadingEl = document.getElementById('loading');
+    if (loadingEl) loadingEl.style.display = 'block';
+}
+
+function hideLoading() {
+    const loadingEl = document.getElementById('loading');
+    if (loadingEl) loadingEl.style.display = 'none';
+}
+
+function showErrorMessage(message) {
+    const errorEl = document.getElementById('error-message');
+    if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+        setTimeout(() => {
+            errorEl.style.display = 'none';
+        }, 3000);
+    }
+}
+
+// 登入表單處理
+document.getElementById('loginForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    try {
+        showLoading();
+        
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        
+        // CSRF token 獲取
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+        if (csrfToken) {
+            axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+        }
+        
+        const data = await apiService.login(username, password);
+        
+        if (data.success) {
+            if (isTokenExpired(data.token)) {
+                throw new Error('Token 已過期');
             }
+            
+            localStorage.setItem('token', data.token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+            
+            // 保存用戶資訊
+            sessionStorage.setItem('userType', data.userType);
+            
+            window.location.href = `/${data.userType}`;
+        }
+    } catch (error) {
+        showErrorMessage(error.message);
+    } finally {
+        hideLoading();
+    }
+});
+
+// Token 定期更新
+setInterval(async () => {
+    const token = localStorage.getItem('token');
+    if (token && isTokenExpired(token)) {
+        try {
+            const response = await fetch(authAPI.refreshToken, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            if (data.success) {
+                localStorage.setItem('token', data.token);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+            }
+        } catch (error) {
+            console.error('Token refresh failed:', error);
+            logout();
+        }
+    }
+}, 5 * 60 * 1000); // 每5分鐘檢查一次
+
+// 聊天記錄獲取範例
+async function fetchChatHistory() {
+    try {
+        const data = await apiService.getChatHistory({
+            page: 1,
+            limit: 20
         });
-    </script>
-</body>
-</html>
+        // 這裡加入您的聊天記錄渲染邏輯
+        console.log('Chat history:', data);
+    } catch (error) {
+        showErrorMessage(error.message);
+    }
+}
