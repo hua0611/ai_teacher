@@ -1,115 +1,122 @@
 const path = require('path');
 const fs = require('fs');
 const express = require('express');
-const session = require('express-session');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const cors = require('cors');
 
 const app = express();
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
-// 設定 EJS 模板引擎（因為 student_home 需要動態）
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-// 使用 JSON Body 解析中間件
+// 中間件設置
+app.use(cors());
 app.use(express.json());
-
-// 設定 Session（必須在路由之前）
-app.use(
-    session({
-        secret: 'your-secret-key',
-        resave: false,
-        saveUninitialized: true,
-    })
-);
-
-// 使用靜態資源 (將 public 資料夾設為靜態檔案根目錄)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 初始化檔案路徑
-const chatRecordsFile = path.join(__dirname, 'chatRecords.json');
-const usersFile = path.join(__dirname, 'users.json');
+// JWT 驗證中間件
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
-// 確保 chatRecords.json 存在
-if (!fs.existsSync(chatRecordsFile)) {
-    fs.writeFileSync(chatRecordsFile, JSON.stringify({}, null, 2));
-}
+  if (!token) {
+    return res.status(401).json({ success: false, message: '未提供驗證令牌' });
+  }
 
-// 確保 users.json 存在
-if (!fs.existsSync(usersFile)) {
-    fs.writeFileSync(usersFile, JSON.stringify([
-        { username: 'student1', password: '123456', userID: 'stu123', userType: 'student', displayName: '學生A' },
-        { username: 'teacher1', password: '654321', userID: 'tea123', userType: 'teacher', displayName: '老師B' }
-    ], null, 2));
-}
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ success: false, message: '令牌無效' });
+    }
+    req.user = user;
+    next();
+  });
+};
 
-// 根路由：返回學習檔案 (靜態 HTML)
-app.get('/', (req, res) => {
-    // 假設你的學習檔案.html 位於 public/student 資料夾中
-    res.sendFile(path.join(__dirname, 'public', 'student', '學習檔案.html'));
-});
+// 路由處理
+app.post('/api/auth/login', async (req, res) => {
+  const { username, password } = req.body;
+  
+  try {
+    const users = JSON.parse(fs.readFileSync(usersFile, 'utf8'));
+    const user = users.find(u => u.username === username);
 
-// 學生主頁路由：使用 EJS 模板 (動態)
-app.get('/student/', (req, res) => {
-    // 若尚未登入，導回首頁或登入頁
-    if (!req.session.user) {
-        return res.redirect('/');
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ success: false, message: '帳號或密碼錯誤' });
     }
 
-    // 傳入 user 物件給 EJS 模板使用
-    res.render('student_home', { user: req.session.user });
-});
+    const token = jwt.sign(
+      { userId: user.userID, userType: user.userType },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
 
-// 教師主頁路由：使用 EJS 模板 (動態)
-app.get('/teacher/', (req, res) => {
-    // 檢查是否已登入且為教師
-    if (!req.session.user || req.session.user.userType !== 'teacher') {
-        return res.redirect('/');
-    }
-    res.render('teacher_home', { user: req.session.user });
-});
-
-// API: 處理登入
-app.post('/api/login', (req, res) => {
-    const { username, password } = req.body;
-
-    fs.readFile(usersFile, 'utf8', (err, data) => {
-        if (err) {
-            console.error('讀取用戶檔案失敗:', err);
-            return res.status(500).json({ success: false, message: '伺服器錯誤' });
-        }
-
-        const users = JSON.parse(data);
-        const user = users.find(u => u.username === username && u.password === password);
-
-        if (!user) {
-            return res.status(401).json({ success: false, message: '帳號或密碼錯誤' });
-        }
-
-        req.session.user = user;
-        res.json({ success: true, userType: user.userType });
+    res.json({
+      success: true,
+      token,
+      userType: user.userType
     });
+  } catch (err) {
+    res.status(500).json({ success: false, message: '伺服器錯誤' });
+  }
 });
 
-// API: 取得學生對話紀錄
-app.get('/api/chatRecords', (req, res) => {
-    if (!req.session.user || req.session.user.userType !== 'student') {
-        return res.status(403).json({ success: false, message: '未授權操作' });
-    }
-
-    const userID = req.session.user.userID;
-    fs.readFile(chatRecordsFile, 'utf8', (err, data) => {
-        if (err) {
-            console.error('讀取對話紀錄失敗:', err);
-            return res.status(500).json({ success: false, message: '伺服器錯誤' });
-        }
-
-        const records = JSON.parse(data);
-        const userRecords = records[userID] || [];
-        res.json({ success: true, records: userRecords });
+// 取得聊天記錄
+app.get('/api/chat/history', authenticateToken, (req, res) => {
+  try {
+    const records = JSON.parse(fs.readFileSync(chatRecordsFile, 'utf8'));
+    const userRecords = records[req.user.userId] || [];
+    
+    res.json({
+      success: true,
+      records: userRecords
     });
+  } catch (err) {
+    res.status(500).json({ success: false, message: '讀取聊天記錄失敗' });
+  }
 });
 
-// 啟動伺服器
+// 新增聊天記錄
+app.post('/api/chat/send', authenticateToken, (req, res) => {
+  const { content } = req.body;
+  const timestamp = new Date();
+  
+  try {
+    const records = JSON.parse(fs.readFileSync(chatRecordsFile, 'utf8'));
+    
+    if (!records[req.user.userId]) {
+      records[req.user.userId] = [];
+    }
+    
+    records[req.user.userId].push({
+      messageId: Date.now().toString(),
+      content,
+      timestamp,
+      isBot: false
+    });
+
+    fs.writeFileSync(chatRecordsFile, JSON.stringify(records, null, 2));
+    
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, message: '儲存聊天記錄失敗' });
+  }
+});
+
+// 取得使用者偏好設定
+app.get('/api/user/preferences', authenticateToken, (req, res) => {
+  try {
+    const preferences = JSON.parse(fs.readFileSync(preferencesFile, 'utf8'));
+    const userPreferences = preferences[req.user.userId] || {};
+    
+    res.json({
+      success: true,
+      preferences: userPreferences
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: '讀取偏好設定失敗' });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`伺服器正在運行於 http://localhost:${PORT}`);
+  console.log(`伺服器正在運行於 http://localhost:${PORT}`);
 });
